@@ -1,0 +1,38 @@
+<%= form_with(model: conjecture, class: "space-y-6") do |form| %>
+  <% if conjecture.errors.any? %>
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+      <h2 class="text-lg font-medium mb-2"><%= pluralize(conjecture.errors.count, "error") %> prohibited this conjecture from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% conjecture.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.text_field :title, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description, "Detailed Description", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <div class="text-xs text-gray-500 mb-1">Describe your conjecture in detail. Make your claim bold and clear.</div>
+    <%= form.text_area :description, rows: 6, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :falsification_criteria, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <div class="text-xs text-gray-500 mb-1">Specify what evidence or conditions would refute this conjecture. Be clear and specific.</div>
+    <%= form.text_area :falsification_criteria, rows: 4, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.select :status, Conjecture.statuses.keys.map { |s| [s.capitalize, s] }, {}, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+  </div>
+<% end %>

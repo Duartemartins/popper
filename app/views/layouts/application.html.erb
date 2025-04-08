@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html class="h-full">
+  <head>
+    <title><%= content_for(:title) || "Popper - Conjectures and Refutations" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="flex flex-col min-h-full bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white shadow-md">
+      <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center">
+          <a href="<%= root_path %>" class="text-xl font-bold">Popper</a>
+          <span class="ml-2 text-sm text-blue-200">Conjectures and Refutations</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <%= link_to "All Conjectures", conjectures_path, class: "hover:text-blue-200" %>
+          <% if user_signed_in? %>
+            <%= link_to "New Conjecture", new_conjecture_path, class: "hover:text-blue-200" %>
+            <div class="ml-4 relative">
+              <span class="text-sm"><%= current_user.email %></span>
+              <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "ml-2 text-sm text-blue-200 hover:text-white" %>
+            </div>
+          <% else %>
+            <%= link_to "Sign In", new_user_session_path, class: "hover:text-blue-200" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "ml-2 bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-md" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Flash messages -->
+    <% if notice %>
+      <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+        <p><%= notice %></p>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+        <p><%= alert %></p>
+      </div>
+    <% end %>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+      <%= yield %>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-auto">
+      <div class="container mx-auto px-6">
+        <p class="text-center text-sm">
+          © <%= Time.current.year %> Popper - A platform for Conjectures and Refutations
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+<% content_for :title, "Edit Conjecture - Popper" %>
+
+<div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-lg">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Edit Conjecture</h1>
+    <p class="text-gray-600 mt-1">Refine your idea based on feedback and new insights</p>
+  </div>
+  
+  <%= render "form", conjecture: @conjecture %>
+  
+  <div class="mt-6 flex justify-between">
+    <%= link_to "View conjecture", @conjecture, class: "text-blue-600 hover:text-blue-800" %>
+    <%= link_to "Back to conjectures", conjectures_path, class: "text-blue-600 hover:text-blue-800" %>
+  </div>
+</div>
