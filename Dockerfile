@@ -61,8 +61,7 @@ RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp && \
     mkdir -p /rails/public/up && \
-    echo "OK" > /rails/public/up/index.html && \
-    # chmod -R 755 /rails/public
+    echo "OK" > /rails/public/up/index.html
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
