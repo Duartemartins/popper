@@ -6,6 +6,7 @@ users_created = 0
 conjectures_created = 0
 refutations_created = 0
 bounties_created = 0
+tags_created = 0
 errors = []
 
 begin
@@ -71,7 +72,7 @@ begin
     conjecture1 = Conjecture.create!(
       title: "Markets Are Efficient Information Processors",
       description: "Financial markets efficiently incorporate all available information into asset prices, making it impossible to consistently achieve returns that beat the market average through skilled stock selection or market timing.",
-      falsification_criteria: "Demonstrating consistently superior returns over a long period through a documented strategy would refute this conjecture. The evidence should control for risk and survivorship bias.",
+      falsification_criteria: "This conjecture would be falsified if: (1) A specific investment strategy demonstrates returns exceeding the market average by at least 15% annually over a minimum 10-year period while controlling for risk factors; (2) The strategy must be documented in advance with clear rules and tested on out-of-sample data; (3) At least three independent research teams must be able to replicate the results by December 2026; (4) The strategy must account for transaction costs, market impact, and survivorship bias.",
       status: "active",
       user: admin
     )
@@ -86,7 +87,7 @@ begin
     conjecture2 = Conjecture.create!(
       title: "Consciousness Requires Biological Substrate",
       description: "Consciousness, as subjectively experienced by humans, is fundamentally dependent on biological processes and cannot emerge from non-biological systems regardless of their complexity or computational power.",
-      falsification_criteria: "Creating a non-biological system that demonstrates behaviors consistent with consciousness and/or passes rigorous versions of the Turing test would refute this conjecture.",
+      falsification_criteria: "This conjecture would be falsified if: (1) A non-biological system demonstrates at least 8 of the 10 agreed-upon markers of consciousness as defined by the Institute of Consciousness Studies by 2030; (2) The system passes a modified Turing test specifically designed to evaluate consciousness markers, administered by at least 5 independent research teams; (3) The system shows measurable physiological responses analogous to those associated with subjective experience in humans (e.g., attention patterns, response to novelty); (4) Results must be reproducible across at least 3 different hardware implementations.",
       status: "active",
       user: user
     )
@@ -101,7 +102,7 @@ begin
     conjecture3 = Conjecture.create!(
       title: "The Fermi Paradox Implies Great Filters",
       description: "The absence of observable alien civilizations despite the vastness of the universe and probability of life suggests that there are one or more 'great filters' preventing the development of interstellar civilizations. These filters may be behind us (rare Earth) or ahead of us (civilizational collapse).",
-      falsification_criteria: "Discovery of numerous alien civilizations or evidence of their widespread existence would falsify this conjecture. Alternatively, a mathematical proof that shows our observational methods are fundamentally flawed would also refute it.",
+      falsification_criteria: "This conjecture would be falsified if: (1) Confirmed detection of at least 3 distinct technological alien civilizations by major space agencies or observatories by 2035; (2) Radio, optical, or other measurable signatures of artificial origin detected from at least 5 different star systems within 100 light-years; (3) Artifact discovery providing conclusive evidence (99% scientific consensus) of extraterrestrial visitation to our solar system; or (4) A rigorous mathematical model, validated by at least 2 independent research teams, demonstrating that our current detection methods have less than 1% probability of finding existing civilizations even if they are common.",
       status: "published",
       user: scientist
     )
@@ -116,7 +117,7 @@ begin
     conjecture4 = Conjecture.create!(
       title: "Free Will is an Illusion",
       description: "What we perceive as free will is merely the experience of making choices without awareness of the deterministic neurological and environmental processes that actually cause our decisions. Our sense of agency is a useful evolutionary adaptation but does not reflect metaphysical freedom.",
-      falsification_criteria: "Demonstrating the existence of decisions that cannot be explained by prior physical causes, or providing evidence for a non-physical mind that can causally influence physical events in ways that violate physical law would refute this conjecture.",
+      falsification_criteria: "This conjecture would be falsified if: (1) A peer-reviewed neuroscience study, replicated by at least 2 independent labs by 2028, demonstrates neurological activity that cannot be explained by prior physical causes; (2) A formal experimental protocol shows decision-making processes that violate causal closure with statistical significance of p<0.001; (3) A measurable mind-brain interaction mechanism is discovered that allows consciousness to affect neural activity without corresponding prior neural correlates; or (4) Quantum effects in the brain are definitively shown to enable free will through controlled experiments that isolate and measure these effects specifically in decision-making processes.",
       status: "active",
       user: philosopher
     )
@@ -131,7 +132,7 @@ begin
     conjecture5 = Conjecture.create!(
       title: "AGI Requires Embodiment",
       description: "Artificial General Intelligence cannot emerge from purely digital systems processing symbolic information. True intelligence requires sensorimotor experience in a physical environment to develop grounded understanding of concepts and causality.",
-      falsification_criteria: "Development of a purely digital system that demonstrates general intelligence across domains without having been embodied or trained on data from embodied systems would falsify this conjecture.",
+      falsification_criteria: "This conjecture would be falsified if: (1) A purely digital AI system demonstrates general intelligence across at least 5 distinct domains (scoring 90%+ on standardized tests for each) by 2033; (2) The system can pass specialized Turing tests focused on physical reasoning without having been explicitly trained on embodied data; (3) The system demonstrates the ability to learn new physical tasks from descriptions alone with 85% accuracy when tested in simulation; (4) At least 3 independent research institutions verify these capabilities using standardized benchmarks; and (5) The system architecture and training methodology is fully documented to prove no embodied data or embodied simulation was used in its development.",
       status: "draft",
       user: scientist
     )
@@ -271,12 +272,66 @@ begin
     puts "Bounty for conjecture4 already exists or conjecture doesn't exist"
   end
 
+  # Add tags to conjectures
+  # Define some common tags
+  tag_names = [
+    "economics", "finance", "markets",
+    "philosophy", "consciousness", "ai",
+    "space", "astronomy", "aliens",
+    "metaphysics", "free will", "determinism",
+    "intelligence", "cognition", "embodiment"
+  ]
+
+  # Create tags if they don't exist
+  created_tags = tag_names.map do |name|
+    tag = Tag.find_or_create_by(name: name.downcase)
+    if tag.persisted? && tag.previously_new_record?
+      tags_created += 1
+      puts "Created tag: #{name}"
+    else
+      puts "Tag '#{name}' already exists"
+    end
+    tag
+  end
+
+  # Add tags to conjectures if they exist
+  if conjecture1
+    # Markets Are Efficient Information Processors
+    conjecture1.tags = Tag.where(name: [ "economics", "finance", "markets" ])
+    puts "Added tags to conjecture: Markets Are Efficient Information Processors"
+  end
+
+  if conjecture2
+    # Consciousness Requires Biological Substrate
+    conjecture2.tags = Tag.where(name: [ "consciousness", "philosophy", "ai" ])
+    puts "Added tags to conjecture: Consciousness Requires Biological Substrate"
+  end
+
+  if conjecture3
+    # The Fermi Paradox Implies Great Filters
+    conjecture3.tags = Tag.where(name: [ "space", "astronomy", "aliens" ])
+    puts "Added tags to conjecture: The Fermi Paradox Implies Great Filters"
+  end
+
+  if conjecture4
+    # Free Will is an Illusion
+    conjecture4.tags = Tag.where(name: [ "philosophy", "free will", "determinism" ])
+    puts "Added tags to conjecture: Free Will is an Illusion"
+  end
+
+  if conjecture5
+    # AGI Requires Embodiment
+    conjecture5.tags = Tag.where(name: [ "ai", "intelligence", "cognition", "embodiment" ])
+    puts "Added tags to conjecture: AGI Requires Embodiment"
+  end
+
   # Print summary
   puts "\nSeed data summary:"
   puts "  Users created: #{users_created}"
   puts "  Conjectures created: #{conjectures_created}"
   puts "  Refutations created: #{refutations_created}"
   puts "  Bounties created: #{bounties_created}"
+  puts "  Tags created: #{tags_created}"
 
   if errors.any?
     puts "\nWarnings/Errors:"

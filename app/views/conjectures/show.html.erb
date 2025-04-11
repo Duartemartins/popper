@@ -36,6 +36,14 @@
       <span>Posted <%= time_ago_in_words(@conjecture.created_at) %> ago</span>
     </div>
 
+    <% if @conjecture.tags.any? %>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <% @conjecture.tags.each do |tag| %>
+          <%= link_to tag.name, "#{conjectures_path}?tag=#{tag.name}", class: "px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200" %>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="mb-6">
       <h3 class="text-lg font-semibold text-gray-700 mb-2">Description</h3>
       <div class="prose max-w-none">
@@ -59,6 +67,23 @@
     </div>
     
     <p class="text-gray-600 mb-6">Contribute to the bounty for anyone who can successfully refute this conjecture</p>
+    
+    <!-- Bounty contributors list -->
+    <% if @conjecture.bounties.any? %>
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Contributors</h3>
+        <div class="bg-gray-50 rounded-md p-4">
+          <ul class="divide-y divide-gray-200">
+            <% @conjecture.bounties.includes(:user).each do |bounty| %>
+              <li class="py-3 flex justify-between items-center">
+                <span class="text-gray-700"><%= bounty.user.email %></span>
+                <span class="font-medium text-green-600">$<%= number_with_precision(bounty.amount, precision: 2) %></span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
     
     <% if user_signed_in? %>
       <%= form_with(model: [@conjecture, @bounty], class: "flex items-end space-x-2") do |form| %>

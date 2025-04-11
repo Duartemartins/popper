@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_11_163300) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_11_174343) do
   create_table "bounties", force: :cascade do |t|
     t.decimal "amount"
     t.integer "user_id", null: false
@@ -42,6 +42,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_11_163300) do
     t.index ["user_id"], name: "index_refutations_on_user_id"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.integer "conjecture_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conjecture_id"], name: "index_taggings_on_conjecture_id"
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -59,4 +74,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_11_163300) do
   add_foreign_key "conjectures", "users"
   add_foreign_key "refutations", "conjectures"
   add_foreign_key "refutations", "users"
+  add_foreign_key "taggings", "conjectures"
+  add_foreign_key "taggings", "tags"
 end
