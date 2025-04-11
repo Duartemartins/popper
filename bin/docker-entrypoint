@@ -29,6 +29,10 @@ fi
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
     echo "===== Rails app is preparing to start ====="
     
+    # Ensure the public directory exists with correct permissions
+    mkdir -p /rails/public
+    chmod 777 /rails/public
+    
     # Create a simple health check endpoint if it doesn't exist
     mkdir -p /rails/public/up
     echo "OK" > /rails/public/up/index.html
