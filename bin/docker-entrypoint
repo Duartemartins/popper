@@ -29,13 +29,13 @@ fi
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
     echo "===== Rails app is preparing to start ====="
     
-    # Ensure the public directory exists with correct permissions
-    mkdir -p /rails/public
-    chmod 777 /rails/public
-    
-    # Create a simple health check endpoint if it doesn't exist
-    mkdir -p /rails/public/up
-    echo "OK" > /rails/public/up/index.html
+    # Ensure the health check endpoint exists (should already be created in Dockerfile)
+    if [ ! -f /rails/public/up/index.html ]; then
+        echo "Creating health check endpoint..."
+        # Try to create it, but don't fail if we can't
+        mkdir -p /rails/public/up 2>/dev/null || true
+        echo "OK" > /rails/public/up/index.html 2>/dev/null || true
+    fi
     
     # Enhanced database initialization with better error handling
     echo "Checking database configuration..."
@@ -44,21 +44,8 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
     echo "Running database migrations..."
     bin/rails db:prepare 2>&1 || echo "Database preparation failed, but continuing..."
     
-    # Check if we need to seed the database (only run if no users exist)
-    echo "Checking if database needs seeding..."
-    if [ "$RAILS_ENV" = "production" ]; then
-        USER_COUNT=$(bin/rails runner "puts User.count rescue puts 0" 2>/dev/null || echo "0")
-        if [ "$USER_COUNT" = "0" ]; then
-            echo "No users found, seeding database..."
-            bin/rails db:seed 2>&1 || echo "Database seeding failed, but continuing..."
-        else
-            echo "Database already has users, skipping seed"
-        fi
-    fi
-    
     # Create a detailed environment report for debugging
     echo "Creating environment report..."
-    mkdir -p /rails/log
     {
         echo "====== Environment Report ======"
         echo "Date: $(date)"
@@ -66,12 +53,9 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
         echo "Rails Version: $(bin/rails --version)"
         echo "Ruby Version: $(ruby -v)"
         echo "Database Adapter: $(bin/rails runner "puts ActiveRecord::Base.connection.adapter_name rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
-        echo "Database Tables: $(bin/rails runner "puts ActiveRecord::Base.connection.tables.join(', ') rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
-        echo "User Count: $(bin/rails runner "puts User.count rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
-        echo "Conjecture Count: $(bin/rails runner "puts Conjecture.count rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
         echo "============================="
-    } > /rails/log/environment_report.log
-    cat /rails/log/environment_report.log
+    } > /tmp/environment_report.log 2>/dev/null || true
+    cat /tmp/environment_report.log 2>/dev/null || true
     
     echo "===== Rails app is ready to start ====="
 fi

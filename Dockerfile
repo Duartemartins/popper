@@ -56,12 +56,15 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
+# Create the health check directory and ensure proper permissions before switching user
+RUN mkdir -p /rails/public/up && \
+    echo "OK" > /rails/public/up/index.html && \
+    chmod -R 755 /rails/public
+
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp && \
-    mkdir -p /rails/public/up && \
-    echo "OK" > /rails/public/up/index.html
+    chown -R rails:rails /rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
@@ -71,7 +74,7 @@ EXPOSE 3000
 # Add health check using the dedicated health check endpoint
 HEALTHCHECK --interval=5s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/up/ || exit 1
 
-# Set the user after creating all necessary directories
+# Set the user after creating all necessary directories and setting permissions
 USER 1000:1000
 
 CMD ["./bin/thrust", "./bin/rails", "server"]
