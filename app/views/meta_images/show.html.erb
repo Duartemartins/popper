@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Popper Meta Image</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(to bottom right, #1e40af, #1e3a8a);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px;
+      color: white;
+    }
+    
+    .content {
+      width: 100%;
+      max-width: 896px;
+    }
+    
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .title {
+      font-size: 72px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .subtitle {
+      font-size: 24px;
+      color: #bfdbfe;
+      text-align: center;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .feature {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .icon-container {
+      margin-bottom: 16px;
+    }
+    
+    .icon {
+      background-color: #2563eb;
+      width: 56px;
+      height: 56px;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    
+    .icon.red {
+      background-color: #dc2626;
+    }
+    
+    .icon.green {
+      background-color: #16a34a;
+    }
+    
+    .feature-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    
+    .feature-description {
+      color: #bfdbfe;
+    }
+    
+    .tagline {
+      text-align: center;
+      margin-bottom: 40px;
+      font-style: italic;
+      font-size: 20px;
+      color: #e0f2fe;
+    }
+    
+    .footer {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .website {
+      font-size: 20px;
+      color: #bfdbfe;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <!-- Logo and title -->
+      <div class="header">
+        <h1 class="title">Popper</h1>
+        <p class="subtitle">Conjectures and Refutations</p>
+      </div>
+      
+      <!-- Feature grid -->
+      <div class="features">
+        <div class="feature">
+          <div class="icon-container">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+          </div>
+          <h3 class="feature-title">Propose</h3>
+          <p class="feature-description">Share your ideas</p>
+        </div>
+        
+        <div class="feature">
+          <div class="icon-container">
+            <div class="icon red">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <h3 class="feature-title">Refute</h3>
+          <p class="feature-description">Challenge assumptions</p>
+        </div>
+        
+        <div class="feature">
+          <div class="icon-container">
+            <div class="icon green">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <h3 class="feature-title">Reward</h3>
+          <p class="feature-description">Earn bounties</p>
+        </div>
+      </div>
+      
+      <!-- Tagline -->
+      <div class="tagline">
+        <p>"In the spirit of critical rationalism"</p>
+      </div>
+      
+      <!-- Footer with website -->
+      <div class="footer">
+        <div class="website">popper.com</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

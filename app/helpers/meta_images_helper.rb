@@ -1,0 +1,2 @@
+module MetaImagesHelper
+end

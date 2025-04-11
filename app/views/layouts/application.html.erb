@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html class="h-full">
   <head>
-    <title><%= content_for(:title) || "Popper - Conjectures and Refutations" %></title>
+    <title><%= meta_title %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="<%= meta_description %>">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= canonical_url %>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= canonical_url %>">
+    <meta property="og:title" content="<%= meta_title %>">
+    <meta property="og:description" content="<%= meta_description %>">
+    <meta property="og:image" content="<%= meta_image %>">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<%= canonical_url %>">
+    <meta property="twitter:title" content="<%= meta_title %>">
+    <meta property="twitter:description" content="<%= meta_description %>">
+    <meta property="twitter:image" content="<%= meta_image %>">
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -25,6 +44,26 @@
       })(window,document,'script','dataLayer','GTM-WQ37W6FG');
     <% end %>
     <!-- End Google Tag Manager -->
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Popper",
+      "url": "<%= root_url %>",
+      "description": "<%= meta_description %>",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "<%= root_url %>?tag={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <% if content_for?(:json_ld) %>
+      <%= content_for(:json_ld) %>
+    <% end %>
 
     <%= yield :head %>
 
