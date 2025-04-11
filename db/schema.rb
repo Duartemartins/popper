@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_08_194403) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_11_163300) do
+  create_table "bounties", force: :cascade do |t|
+    t.decimal "amount"
+    t.integer "user_id", null: false
+    t.integer "conjecture_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conjecture_id"], name: "index_bounties_on_conjecture_id"
+    t.index ["user_id"], name: "index_bounties_on_user_id"
+  end
+
   create_table "conjectures", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -44,6 +54,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_08_194403) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bounties", "conjectures"
+  add_foreign_key "bounties", "users"
   add_foreign_key "conjectures", "users"
   add_foreign_key "refutations", "conjectures"
   add_foreign_key "refutations", "users"

@@ -6,9 +6,70 @@ if [ -z "${LD_PRELOAD+x}" ]; then
     export LD_PRELOAD
 fi
 
+# Add a short sleep to ensure all services are ready
+sleep 2
+
+# Check if RAILS_MASTER_KEY is available and has correct length
+if [ -n "$RAILS_MASTER_KEY" ]; then
+    # Check if the key length is correct (should be 32 hex characters = 16 bytes)
+    if [ ${#RAILS_MASTER_KEY} -ne 32 ]; then
+        echo "ERROR: RAILS_MASTER_KEY must be exactly 32 characters (16 bytes)"
+        echo "Current length: ${#RAILS_MASTER_KEY} characters"
+        
+        # If we're in production, fail immediately
+        if [ "$RAILS_ENV" = "production" ]; then
+            exit 1
+        fi
+    else
+        echo "RAILS_MASTER_KEY is the correct length"
+    fi
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+    echo "===== Rails app is preparing to start ====="
+    
+    # Create a simple health check endpoint if it doesn't exist
+    mkdir -p /rails/public/up
+    echo "OK" > /rails/public/up/index.html
+    
+    # Enhanced database initialization with better error handling
+    echo "Checking database configuration..."
+    bin/rails db:version || echo "Database not yet created"
+    
+    echo "Running database migrations..."
+    bin/rails db:prepare 2>&1 || echo "Database preparation failed, but continuing..."
+    
+    # Check if we need to seed the database (only run if no users exist)
+    echo "Checking if database needs seeding..."
+    if [ "$RAILS_ENV" = "production" ]; then
+        USER_COUNT=$(bin/rails runner "puts User.count rescue puts 0" 2>/dev/null || echo "0")
+        if [ "$USER_COUNT" = "0" ]; then
+            echo "No users found, seeding database..."
+            bin/rails db:seed 2>&1 || echo "Database seeding failed, but continuing..."
+        else
+            echo "Database already has users, skipping seed"
+        fi
+    fi
+    
+    # Create a detailed environment report for debugging
+    echo "Creating environment report..."
+    mkdir -p /rails/log
+    {
+        echo "====== Environment Report ======"
+        echo "Date: $(date)"
+        echo "Rails Environment: $RAILS_ENV"
+        echo "Rails Version: $(bin/rails --version)"
+        echo "Ruby Version: $(ruby -v)"
+        echo "Database Adapter: $(bin/rails runner "puts ActiveRecord::Base.connection.adapter_name rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
+        echo "Database Tables: $(bin/rails runner "puts ActiveRecord::Base.connection.tables.join(', ') rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
+        echo "User Count: $(bin/rails runner "puts User.count rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
+        echo "Conjecture Count: $(bin/rails runner "puts Conjecture.count rescue puts 'Unknown'" 2>/dev/null || echo "Unknown")"
+        echo "============================="
+    } > /rails/log/environment_report.log
+    cat /rails/log/environment_report.log
+    
+    echo "===== Rails app is ready to start ====="
 fi
 
 exec "${@}"

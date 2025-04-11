@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+alice_bounty:
+  amount: 25.00
+  user: alice
+  conjecture: published_conjecture
+
+bob_bounty:
+  amount: 50.00
+  user: bob
+  conjecture: active_conjecture
+
+alice_second_bounty:
+  amount: 15.00
+  user: alice
+  conjecture: active_conjecture

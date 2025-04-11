@@ -1,2 +1,2 @@
-web: bin/rails server
-css: bin/rails tailwindcss:watch
+web: RAILS_ENV=development bin/rails server
+css: RAILS_ENV=development bin/rails tailwindcss:watch

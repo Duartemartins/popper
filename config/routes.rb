@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :conjectures do
     resources :refutations, only: [ :create, :destroy ]
+    resources :bounties, only: [ :create ]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

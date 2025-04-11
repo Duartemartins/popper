@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  content: MyText
-  conjecture: one
-  user: one
+alice_refutation:
+  content: The gravitational attraction appears to vary with altitude, suggesting it's not a constant force.
+  conjecture: published_conjecture
+  user: alice
 
-two:
-  content: MyText
-  conjecture: two
-  user: two
+bob_refutation:
+  content: Some observations from space suggest the earth might have flat regions at the poles.
+  conjecture: active_conjecture
+  user: bob

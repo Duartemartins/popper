@@ -1,0 +1,51 @@
+# Name of your application. Used to uniquely configure containers.
+service: popper
+
+# Name of the container image.
+image: sintrastellar/popper
+
+proxy:
+  ssl: true
+  host: popper.popadex.com
+
+# Deploy to these servers.
+servers:
+  web:
+    # options:
+    #   # Connect to the existing 'private' network that Traefik is already using
+    #   network:
+    #     - private
+    hosts:
+      - 128.140.68.36
+
+
+# Credentials for your image host.
+registry:
+  username: sintrastellar
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Configure the image builder.
+builder:
+  arch: amd64
+
+# Inject ENV variables into containers.
+env:
+  clear:
+    RAILS_ENV: production
+    RACK_ENV: production
+    RAILS_SERVE_STATIC_FILES: true
+    RAILS_LOG_TO_STDOUT: true
+    HOST: popper.popadex.com
+  secret:
+    - RAILS_MASTER_KEY
+
+# Use the same SSH user as your other application.
+ssh:
+  user: root
+
+# We'll use a persistent storage volume for uploads and other persistent data.
+volumes:
+  - "popper_storage:/rails/storage"
+
+

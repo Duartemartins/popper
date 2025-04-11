@@ -49,8 +49,6 @@ RUN bundle exec bootsnap precompile app/ lib/
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
-
-
 # Final stage for app image
 FROM base
 
@@ -68,5 +66,8 @@ USER 1000:1000
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
+EXPOSE 3000
+# Add health check using the dedicated health check endpoint
+HEALTHCHECK --interval=5s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/up/ || exit 1
+
 CMD ["./bin/thrust", "./bin/rails", "server"]

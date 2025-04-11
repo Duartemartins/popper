@@ -6,4 +6,5 @@ class User < ApplicationRecord
 
   has_many :conjectures, dependent: :destroy
   has_many :refutations, dependent: :destroy
+  has_many :bounties, dependent: :destroy
 end

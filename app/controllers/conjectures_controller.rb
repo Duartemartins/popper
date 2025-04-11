@@ -9,6 +9,7 @@ class ConjecturesController < ApplicationController
 
   def show
     @refutation = Refutation.new
+    @bounty = Bounty.new
   end
 
   def new
