@@ -5,7 +5,7 @@
   <div class="bg-white shadow-md rounded-lg p-6 mb-8">
     <div class="flex justify-between items-start mb-4">
       <div class="flex space-x-2">
-        <span class="inline-block px-3 py-1 text-sm <%= status_color(@conjecture.status) %> rounded-full">
+        <span class="inline-block px-3 py-1 text-sm <%= status_color(@conjecture.status, @conjecture.refutations.count) %> rounded-full">
           <%= @conjecture.status.capitalize %>
         </span>
         <span class="inline-block px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
@@ -116,20 +116,48 @@
     <% if @conjecture.refutations.any? %>
       <div class="space-y-4">
         <% @conjecture.refutations.each do |refutation| %>
-          <div class="bg-white shadow-md rounded-lg p-5">
+          <div class="bg-white shadow-md rounded-lg p-5 <%= refutation.accepted ? 'border-2 border-green-500' : '' %>">
+            <% if refutation.accepted %>
+              <div class="bg-green-100 text-green-800 px-4 py-2 rounded-t-lg mb-3 -mt-5 -mx-5 border-b border-green-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-medium">Accepted refutation</span>
+                  </div>
+                  <% if @conjecture.total_bounty > 0 %>
+                    <span class="text-sm">
+                      Bounty awarded: $<%= number_with_precision(@conjecture.total_bounty, precision: 2) %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
             <div class="flex justify-between mb-3">
               <div class="text-gray-600 text-sm">
                 <span><%= refutation.user.email %></span>
                 <span class="mx-1">•</span>
                 <span><%= time_ago_in_words(refutation.created_at) %> ago</span>
               </div>
-              <% if user_signed_in? && refutation.user == current_user %>
-                <%= button_to conjecture_refutation_path(@conjecture, refutation), method: :delete, data: { confirm: "Are you sure you want to delete this refutation?" }, class: "text-gray-500 hover:text-red-600" do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                  </svg>
+              <div class="flex space-x-2">
+                <% if user_signed_in? && refutation.user == current_user %>
+                  <%= button_to conjecture_refutation_path(@conjecture, refutation), method: :delete, data: { confirm: "Are you sure you want to delete this refutation?" }, class: "text-gray-500 hover:text-red-600" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                  <% end %>
                 <% end %>
-              <% end %>
+                
+                <% if user_signed_in? && @conjecture.user == current_user && @conjecture.active? && !refutation.accepted %>
+                  <%= button_to accept_conjecture_refutation_path(@conjecture, refutation), 
+                                method: :post, 
+                                data: { confirm: "Are you sure you want to accept this refutation? This will mark your conjecture as refuted and award the bounty to #{refutation.user.email}." },
+                                class: "ml-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-1 px-3 rounded" do %>
+                    Accept Refutation
+                  <% end %>
+                <% end %>
+              </div>
             </div>
             <div class="prose max-w-none">
               <%= simple_format(refutation.content, class: "text-gray-700") %>

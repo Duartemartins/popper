@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_11_174343) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_11_175624) do
   create_table "bounties", force: :cascade do |t|
     t.decimal "amount"
     t.integer "user_id", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_11_174343) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "accepted"
     t.index ["conjecture_id"], name: "index_refutations_on_conjecture_id"
     t.index ["user_id"], name: "index_refutations_on_user_id"
   end

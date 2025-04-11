@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :conjectures do
-    resources :refutations, only: [ :create, :destroy ]
+    resources :refutations, only: [ :create, :destroy ] do
+      member do
+        post :accept
+      end
+    end
     resources :bounties, only: [ :create ]
   end
 

@@ -56,7 +56,7 @@
         <div class="p-6">
           <div class="flex items-center justify-between mb-2">
             <div class="flex space-x-2">
-              <span class="inline-block px-2 py-1 text-xs <%= status_color(conjecture.status) %> rounded-full">
+              <span class="inline-block px-2 py-1 text-xs <%= status_color(conjecture.status, conjecture.refutations.count) %> rounded-full">
                 <%= conjecture.status&.capitalize || "Active" %>
               </span>
               <% if conjecture.total_bounty > 0 %>
