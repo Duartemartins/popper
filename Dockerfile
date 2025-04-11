@@ -56,21 +56,23 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Create the health check directory and ensure proper permissions before switching user
-RUN mkdir -p /rails/public/up && \
-    echo "OK" > /rails/public/up/index.html && \
-    chmod -R 755 /rails/public
-
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
+    mkdir -p /rails/public/up && \
+    echo "OK" > /rails/public/up/index.html && \
+    chmod -R 755 /rails/public && \
     chown -R rails:rails /rails
+
+# Explicitly grant ownership of the bundle directory to rails user
+RUN chown -R rails:rails "${BUNDLE_PATH}"
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 3000
+
 # Add health check using the dedicated health check endpoint
 HEALTHCHECK --interval=5s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:3000/up/ || exit 1
 
