@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
 
+  # User profile routes
+  resource :profile, only: [ :show, :edit, :update ], controller: "users" do
+    post "claim_bounty", on: :member
+  end
+
   resources :conjectures do
     resources :refutations, only: [ :create, :destroy ] do
       member do
