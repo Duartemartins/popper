@@ -103,7 +103,7 @@ begin
       title: "The Fermi Paradox Implies Great Filters",
       description: "The absence of observable alien civilizations despite the vastness of the universe and probability of life suggests that there are one or more 'great filters' preventing the development of interstellar civilizations. These filters may be behind us (rare Earth) or ahead of us (civilizational collapse).",
       falsification_criteria: "This conjecture would be falsified if: (1) Confirmed detection of at least 3 distinct technological alien civilizations by major space agencies or observatories by 2035; (2) Radio, optical, or other measurable signatures of artificial origin detected from at least 5 different star systems within 100 light-years; (3) Artifact discovery providing conclusive evidence (99% scientific consensus) of extraterrestrial visitation to our solar system; or (4) A rigorous mathematical model, validated by at least 2 independent research teams, demonstrating that our current detection methods have less than 1% probability of finding existing civilizations even if they are common.",
-      status: "published",
+      status: "active",
       user: scientist
     )
     conjectures_created += 1
@@ -133,7 +133,7 @@ begin
       title: "AGI Requires Embodiment",
       description: "Artificial General Intelligence cannot emerge from purely digital systems processing symbolic information. True intelligence requires sensorimotor experience in a physical environment to develop grounded understanding of concepts and causality.",
       falsification_criteria: "This conjecture would be falsified if: (1) A purely digital AI system demonstrates general intelligence across at least 5 distinct domains (scoring 90%+ on standardized tests for each) by 2033; (2) The system can pass specialized Turing tests focused on physical reasoning without having been explicitly trained on embodied data; (3) The system demonstrates the ability to learn new physical tasks from descriptions alone with 85% accuracy when tested in simulation; (4) At least 3 independent research institutions verify these capabilities using standardized benchmarks; and (5) The system architecture and training methodology is fully documented to prove no embodied data or embodied simulation was used in its development.",
-      status: "draft",
+      status: "active",
       user: scientist
     )
     conjectures_created += 1
