@@ -27,6 +27,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <% if Rails.env.production? %>
     <!-- Google Tag Manager -->
     <%= javascript_tag nonce: true do %>
       (function(w,d,s,l,i){
@@ -44,6 +45,7 @@
       })(window,document,'script','dataLayer','GTM-WQ37W6FG');
     <% end %>
     <!-- End Google Tag Manager -->
+    <% end %>
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -79,10 +81,12 @@
   </head>
 
   <body class="flex flex-col min-h-full bg-gray-50 text-gray-800">
+    <% if Rails.env.production? %>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQ37W6FG"
 height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_security_policy_nonce %>"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    <% end %>
 
     <!-- Navigation -->
     <nav class="bg-blue-800 text-white shadow-md">
