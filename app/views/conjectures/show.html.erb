@@ -31,7 +31,7 @@
     <h1 class="text-3xl font-bold text-gray-800 mb-4"><%= @conjecture.title %></h1>
 
     <div class="flex items-center text-gray-500 text-sm mb-6">
-      <span>By <%= @conjecture.user.email %></span>
+      <span>By <%= @conjecture.user.display_name %></span>
       <span class="mx-2">•</span>
       <span>Posted <%= time_ago_in_words(@conjecture.created_at) %> ago</span>
     </div>
@@ -76,7 +76,7 @@
           <ul class="divide-y divide-gray-200">
             <% @conjecture.bounties.includes(:user).each do |bounty| %>
               <li class="py-3 flex justify-between items-center">
-                <span class="text-gray-700"><%= bounty.user.email %></span>
+                <span class="text-gray-700"><%= bounty.user.display_name %></span>
                 <span class="font-medium text-green-600">$<%= number_with_precision(bounty.amount, precision: 2) %></span>
               </li>
             <% end %>
@@ -136,7 +136,7 @@
             <% end %>
             <div class="flex justify-between mb-3">
               <div class="text-gray-600 text-sm">
-                <span><%= refutation.user.email %></span>
+                <span><%= refutation.user.display_name %></span>
                 <span class="mx-1">•</span>
                 <span><%= time_ago_in_words(refutation.created_at) %> ago</span>
               </div>
@@ -152,7 +152,7 @@
                 <% if user_signed_in? && @conjecture.user == current_user && @conjecture.active? && !refutation.accepted %>
                   <%= button_to accept_conjecture_refutation_path(@conjecture, refutation), 
                                 method: :post, 
-                                data: { confirm: "Are you sure you want to accept this refutation? This will mark your conjecture as refuted and award the bounty to #{refutation.user.email}." },
+                                data: { confirm: "Are you sure you want to accept this refutation? This will mark your conjecture as refuted and award the bounty to #{refutation.user.display_name}." },
                                 class: "ml-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-1 px-3 rounded" do %>
                     Accept Refutation
                   <% end %>

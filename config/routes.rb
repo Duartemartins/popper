@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get "meta_images/generate"
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: "users/registrations"
+  }
   get "meta_image", to: "meta_images#show"
 
   # User profile routes
