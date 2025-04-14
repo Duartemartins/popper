@@ -51,7 +51,7 @@ class User < ApplicationRecord
     else
       "Anonymous User"
     end
-    
+
     # Don't append organization for anonymous users or if base_name is already "Anonymous User"
     if organization.present? && display_name_preference != "anonymous" && base_name != "Anonymous User"
       "#{base_name}, #{organization}"
