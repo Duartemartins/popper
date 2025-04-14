@@ -27,7 +27,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <% if Rails.env.production? %>
+    <% if Rails.env.production? && Rails.application.credentials.GOOGLE_TAG_MANAGER_ID.present? %>
     <!-- Google Tag Manager -->
     <%= javascript_tag nonce: true do %>
       (function(w,d,s,l,i){
@@ -42,7 +42,7 @@
         var n=d.querySelector('[nonce]');
         n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));
         f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-WQ37W6FG');
+      })(window,document,'script','dataLayer','<%= Rails.application.credentials.GOOGLE_TAG_MANAGER_ID %>');
     <% end %>
     <!-- End Google Tag Manager -->
     <% end %>
@@ -81,9 +81,9 @@
   </head>
 
   <body class="flex flex-col min-h-full bg-gray-50 text-gray-800">
-    <% if Rails.env.production? %>
+    <% if Rails.env.production? && Rails.application.credentials.GOOGLE_TAG_MANAGER_ID.present? %>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQ37W6FG"
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Rails.application.credentials.GOOGLE_TAG_MANAGER_ID %>"
 height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_security_policy_nonce %>"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <% end %>
