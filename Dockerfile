@@ -37,7 +37,10 @@ RUN apt-get update -qq && \
       automake \
       libtool \
       libgmp-dev \
-      gettext && \
+      gettext \
+      libffi-dev \
+      libssl-dev \
+      python3-dev && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 COPY Gemfile Gemfile.lock ./
@@ -57,7 +60,6 @@ FROM base
 # Install only the shared libs necessary at runtime
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      libsecp256k1-0 \
       libgmp10 \
       libffi8 \
       libssl3 && \
