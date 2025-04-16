@@ -6,31 +6,26 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="description" content="<%= meta_description %>">
-    
     <!-- Canonical URL -->
     <link rel="canonical" href="<%= canonical_url %>">
-    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="<%= canonical_url %>">
     <meta property="og:title" content="<%= meta_title %>">
     <meta property="og:description" content="<%= meta_description %>">
     <meta property="og:image" content="<%= meta_image %>">
-    
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="<%= canonical_url %>">
     <meta property="twitter:title" content="<%= meta_title %>">
     <meta property="twitter:description" content="<%= meta_description %>">
     <meta property="twitter:image" content="<%= meta_image %>">
-    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <% if Rails.env.production? && Rails.application.credentials.GOOGLE_TAG_MANAGER_ID.present? %>
-    <!-- Google Tag Manager -->
-    <%= javascript_tag nonce: true do %>
-      (function(w,d,s,l,i){
+      <!-- Google Tag Manager -->
+      <%= javascript_tag nonce: true do %>
+        (function(w,d,s,l,i){
         w[l]=w[l]||[];
         w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0],
@@ -42,52 +37,50 @@
         var n=d.querySelector('[nonce]');
         n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));
         f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','<%= Rails.application.credentials.GOOGLE_TAG_MANAGER_ID %>');
+        })(window,document,'script','dataLayer','<%= Rails.application.credentials.GOOGLE_TAG_MANAGER_ID %>');
+      <% end %>
+      <!-- End Google Tag Manager -->
     <% end %>
-    <!-- End Google Tag Manager -->
-    <% end %>
-
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Popper",
-      "url": "<%= root_url %>",
-      "description": "<%= meta_description %>",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "<%= root_url %>?tag={search_term_string}",
-        "query-input": "required name=search_term_string"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Popper",
+        "url": "<%= root_url %>",
+        "description": "<%= meta_description %>",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "<%= root_url %>?tag={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
       }
-    }
     </script>
-    
     <% if content_for?(:json_ld) %>
       <%= content_for(:json_ld) %>
     <% end %>
-
     <%= yield :head %>
-
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
+    <!-- Stylesheets -->
+    <link rel="preload" href="/assets/application-8b441ae0.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/application-8b441ae0.css"></noscript>
+    <link rel="preload" href="/assets/tailwind-f9742271.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/tailwind-f9742271.css"></noscript>
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%#= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
   </head>
-
   <body class="flex flex-col min-h-full bg-gray-50 text-gray-800">
     <% if Rails.env.production? && Rails.application.credentials.GOOGLE_TAG_MANAGER_ID.present? %>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Rails.application.credentials.GOOGLE_TAG_MANAGER_ID %>"
+      <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Rails.application.credentials.GOOGLE_TAG_MANAGER_ID %>"
 height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_security_policy_nonce %>"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+      <!-- End Google Tag Manager (noscript) -->
     <% end %>
-
     <!-- Navigation -->
     <nav class="bg-blue-800 text-white shadow-md">
       <div class="container mx-auto px-6 py-3 flex justify-between items-center">
@@ -98,9 +91,10 @@ height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_s
         <div class="flex items-center space-x-4">
           <% if user_signed_in? %>
             <%= link_to "New Conjecture", new_conjecture_path, class: "hover:text-blue-200" %>
+            <%= link_to "Docs", docs_path, class: "hover:text-blue-200" %>
             <div class="ml-4 relative flex items-center">
               <span class="text-sm <%= current_user.total_awarded_bounty > 0 ? 'bg-yellow-600' : 'bg-gray-700' %> text-white px-2 py-1 rounded mr-2">
-                <span class="font-medium">$<%= number_with_precision(current_user.total_awarded_bounty, precision: 2) %></span> earned
+                <span class="font-medium">Ξ<%= number_with_precision(current_user.total_awarded_bounty, precision: 5, strip_insignificant_zeros: true) %></span> earned
               </span>
               <%= link_to profile_path, class: "text-md hover:text-blue-200" do %>
                 <span>Profile</span>
@@ -111,10 +105,16 @@ height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_s
             <%= link_to "Sign In", new_user_session_path, class: "hover:text-blue-200" %>
             <%= link_to "Sign Up", new_user_registration_path, class: "ml-2 bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-md" %>
           <% end %>
+          <div data-controller="metamask">
+            <button type="button" 
+              data-action="click->metamask#connectMetaMask" data-metamask-target="button" id="navbar-connect-metamask" class="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1 px-3 rounded">
+              Connect MetaMask
+            </button>
+            <span id="navbar-wallet-address" data-metamask-target="address" class="ml-2 text-xs text-blue-200"></span>
+          </div>
         </div>
       </div>
     </nav>
-
     <!-- Flash messages -->
     <% if notice %>
       <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
@@ -126,17 +126,17 @@ height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_s
         <p><%= alert %></p>
       </div>
     <% end %>
-
     <main class="flex-grow container mx-auto px-4 py-8">
       <%= yield %>
     </main>
-
     <footer class="bg-gray-800 text-white py-6 mt-auto">
       <div class="container mx-auto px-6">
         <p class="text-center text-sm">
-            © <%= Time.current.year %> Popper - A platform for Conjectures and Refutations by <a href="https://popadex.com?utm_source=popper&utm_medium=footer" class="text-blue-400 hover:underline">PopaDex</a>
+          &copy; <%= Time.current.year %> Popper - A platform for Conjectures and Refutations by <a href="https://popadex.com?utm_source=popper&utm_medium=footer" class="text-blue-400 hover:underline">PopaDex</a>
         </p>
       </div>
     </footer>
   </body>
+  <!-- Stimulus: Use Rails 8 importmap helpers for controllers -->
+  <%# <%= javascript_importmap_tags %>  
 </html>

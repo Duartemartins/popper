@@ -9,7 +9,9 @@ class UpdateConjectureStatuses < ActiveRecord::Migration[8.0]
     end
 
     # Reset the status column with the new enum values
-    Conjecture.connection.execute("DELETE FROM active_record_internal_metadata WHERE key = 'conjecture_statuses'")
+    if ActiveRecord::Base.connection.table_exists?(:active_record_internal_metadata)
+      Conjecture.connection.execute("DELETE FROM active_record_internal_metadata WHERE key = 'conjecture_statuses'")
+    end
 
     # Change the column default to 0 (active)
     change_column_default :conjectures, :status, 0

@@ -77,4 +77,18 @@ class ConjecturesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to conjectures_path
     assert_equal "You are not authorized to perform this action.", flash[:alert]
   end
+
+  test "should not destroy conjecture with accepted refutation" do
+    # Make sure the user owns the conjecture
+    @conjecture.update(user: @user)
+    # Create an accepted refutation
+    accepted_refutation = @conjecture.refutations.create!(user: @user, content: "Accepted!", accepted: true)
+    
+    assert_no_difference("Conjecture.count") do
+      delete conjecture_path(@conjecture)
+    end
+    
+    assert_redirected_to conjecture_path(@conjecture)
+    assert_equal "You cannot delete a conjecture with an accepted refutation.", flash[:alert]
+  end
 end

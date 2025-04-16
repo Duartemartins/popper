@@ -17,6 +17,10 @@ class RefutationsController < ApplicationController
   end
 
   def destroy
+    if @refutation.accepted? && !(current_user&.admin?)
+      redirect_to conjecture_path(@conjecture), alert: "Only admins can delete an accepted refutation."
+      return
+    end
     @refutation.destroy
     redirect_to conjecture_path(@conjecture), notice: "Refutation was successfully deleted."
   end
@@ -29,6 +33,9 @@ class RefutationsController < ApplicationController
       # Mark the conjecture as refuted
       @conjecture.update!(status: :refuted)
 
+      # Mark all bounties as paid and associate them with the accepted refutation
+      @conjecture.bounties.update_all(paid: true, refutation_id: @refutation.id)
+
       # Award the bounty to the refutation author if there is any bounty
       if @conjecture.total_bounty > 0
         # Get all bounty amounts
@@ -37,7 +44,7 @@ class RefutationsController < ApplicationController
         # Record the payout in a more permanent way
         # You could create a Payout model for this in a real app
         # For now, we'll add a note to the refutation content
-        payout_note = "\n\n[System] Bounty of $#{bounty_total} awarded to #{@refutation.user.email} on #{Time.now.strftime('%B %d, %Y')}"
+        payout_note = "\n\n[System] Bounty of $#{bounty_total} awarded to #{@refutation.user.display_name} on #{Time.now.strftime('%B %d, %Y')}"
         @refutation.update!(content: @refutation.content + payout_note)
 
         # In a real app, you might trigger an email notification here
@@ -45,7 +52,7 @@ class RefutationsController < ApplicationController
       end
     end
 
-    redirect_to conjecture_path(@conjecture), notice: "Refutation accepted! The conjecture has been marked as refuted and any bounty has been awarded to #{@refutation.user.email}."
+    redirect_to conjecture_path(@conjecture), notice: "Refutation accepted! The conjecture has been marked as refuted and any bounty has been awarded to #{@refutation.user.display_name}."
   end
 
   private

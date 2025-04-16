@@ -1,6 +1,14 @@
 <% content_for :title, "Your Profile - Popper" %>
 
 <div class="max-w-4xl mx-auto">
+  <%# Notification for pending bounties due to missing wallet %>
+  <% if @pending_wallet_bounties.any? && @user.wallet_address.blank? %>
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+      <p class="font-bold">Action Required: Pending Bounty Payouts</p>
+      <p>You have <%= pluralize(@pending_wallet_bounties.count, "bounty") %> awaiting payout. Please <%= link_to "add your Wallet Address", edit_profile_path, class: "font-bold underline hover:text-yellow-800" %> to receive your funds.</p>
+    </div>
+  <% end %>
+
   <!-- Profile Header -->
   <div class="bg-white shadow-md rounded-lg p-6 mb-8">
     <div class="flex justify-between items-center mb-4">
@@ -57,9 +65,11 @@
           <p class="mb-2"><span class="font-medium">Title:</span> <%= @user.title %></p>
         <% end %>
         
-        <% if @user.organization.present? %>
-          <p class="mb-2"><span class="font-medium">Organization:</span> <%= @user.organization %></p>
+        <% if @user.wallet_address.present? %>
+          <p class="mb-2"><span class="font-medium">Wallet Address:</span> <%= @user.wallet_address %></p>
         <% end %>
+        
+        <p class="mb-2"><span class="font-medium">Ethereum Address:</span> <span class="font-mono"><%= @user.eth_address.presence || 'Not set' %></span></p>
         
         <p class="mb-2"><span class="font-medium">Email:</span> <%= @user.email %></p>
         <p class="mb-2"><span class="font-medium">Member since:</span> <%= @user.created_at.strftime("%B %d, %Y") %></p>
@@ -67,18 +77,24 @@
       
       <div>
         <h2 class="text-xl font-semibold mb-4">Bounty Summary</h2>
+        <div class="mb-4">
+          <p class="text-gray-600 text-sm">Bounties earned from accepted refutations are released by admins.</p>
+          <p class="text-gray-600 text-sm mt-1">Ensure your wallet address is set correctly to receive payments.</p>
+        </div>
         <div class="flex items-center mb-4">
-          <div class="<%= @user.total_awarded_bounty > 0 ? 'bg-yellow-600' : 'bg-gray-700' %> text-white px-4 py-2 rounded">
-            <span class="text-lg font-bold">$<%= number_with_precision(@user.total_awarded_bounty, precision: 2) %></span>
+          <div class="bg-gray-700 text-white px-4 py-2 rounded">
+            <span class="text-lg font-bold">Ξ<%= number_with_precision(@user.total_awarded_bounty, precision: 5, strip_insignificant_zeros: true) %></span>
             <span class="ml-2">total bounty earned</span>
           </div>
         </div>
-        
-        <% if @user.total_awarded_bounty > 0 %>
-          <%= button_to claim_bounty_profile_path, method: :post, class: "bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded" do %>
-            Claim Your Bounty
-          <% end %>
-        <% end %>
+        <div class="flex items-center mb-4">
+          <div class="bg-green-700 text-white px-4 py-2 rounded">
+            <span class="text-lg font-bold">Ξ<%= number_with_precision(@user.total_received_from_platform, precision: 5, strip_insignificant_zeros: true) %></span>
+            <span class="ml-2">total bounty received</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
       </div>
     </div>
   </div>
@@ -137,7 +153,7 @@
             <div class="flex justify-between text-sm">
               <span class="text-gray-500">Posted <%= time_ago_in_words(refutation.created_at) %> ago</span>
               <% if refutation.accepted && refutation.conjecture.total_bounty > 0 %>
-                <span class="text-green-600">Bounty earned: $<%= number_with_precision(refutation.conjecture.total_bounty, precision: 2) %></span>
+                <span class="text-green-600">Bounty earned: Ξ<%= number_with_precision(refutation.conjecture.total_bounty, precision: 5, strip_insignificant_zeros: true) %></span>
               <% end %>
             </div>
           </div>

@@ -5,11 +5,23 @@ class BountiesController < ApplicationController
   def create
     @bounty = @conjecture.bounties.build(bounty_params)
     @bounty.user = current_user
+    @bounty.save
+    redirect_to @conjecture, notice: 'Bounty added. Payout will be sent from Popper platform wallet.'
+  end
 
-    if @bounty.save
-      redirect_to @conjecture, notice: "Bounty was successfully added."
+  def release
+    @bounty = @conjecture.bounties.find(params[:id])
+    recipient = @conjecture.user
+    amount_eth = @bounty.amount.to_f
+    if recipient.eth_address.blank?
+      redirect_to @conjecture, alert: 'Recipient does not have an Ethereum address.' and return
+    end
+    tx_hash = EthereumWallet.send_eth(recipient.eth_address, amount_eth)
+    if tx_hash.present?
+      @bounty.update!(released_at: Time.current, eth_tx_hash: tx_hash)
+      redirect_to @conjecture, notice: "Bounty released to recipient! Ethereum tx: #{tx_hash}"
     else
-      redirect_to @conjecture, alert: "Failed to add bounty. #{@bounty.errors.full_messages.to_sentence}"
+      redirect_to @conjecture, alert: 'Failed to release bounty.'
     end
   end
 
@@ -20,6 +32,6 @@ class BountiesController < ApplicationController
   end
 
   def bounty_params
-    params.require(:bounty).permit(:amount)
+    params.require(:bounty).permit(:amount, :currency, :country)
   end
 end

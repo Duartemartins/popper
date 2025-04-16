@@ -10,14 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_14_145111) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_16_191000) do
   create_table "bounties", force: :cascade do |t|
     t.decimal "amount"
     t.integer "user_id", null: false
     t.integer "conjecture_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "paid", default: false
+    t.datetime "released_at"
+    t.string "rapyd_payment_id"
+    t.string "rapyd_escrow_status"
+    t.string "tx_hash"
+    t.integer "refutation_id"
+    t.boolean "pending_wallet", default: false, null: false
+    t.string "payout_tx_hash"
     t.index ["conjecture_id"], name: "index_bounties_on_conjecture_id"
+    t.index ["refutation_id"], name: "index_bounties_on_refutation_id"
     t.index ["user_id"], name: "index_bounties_on_user_id"
   end
 
@@ -72,11 +81,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_14_145111) do
     t.string "last_name"
     t.integer "display_name_preference"
     t.string "organization"
+    t.boolean "admin"
+    t.string "rapyd_wallet_id"
+    t.string "country", default: "", null: false
+    t.string "rapyd_customer_id"
+    t.string "currency", default: "", null: false
+    t.string "eth_address"
+    t.string "wallet_address"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["rapyd_wallet_id"], name: "index_users_on_rapyd_wallet_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "bounties", "conjectures"
+  add_foreign_key "bounties", "refutations"
   add_foreign_key "bounties", "users"
   add_foreign_key "conjectures", "users"
   add_foreign_key "refutations", "conjectures"

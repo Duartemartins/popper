@@ -1,0 +1,33 @@
+<h1 class="text-2xl font-bold mb-6">Escrowed Bounties</h1>
+<table class="min-w-full divide-y divide-gray-200">
+  <thead>
+    <tr>
+      <th class="px-4 py-2">ID</th>
+      <th class="px-4 py-2">Conjecture</th>
+      <th class="px-4 py-2">Funder</th>
+      <th class="px-4 py-2">Recipient</th>
+      <th class="px-4 py-2">Amount</th>
+      <th class="px-4 py-2">Paid At</th>
+      <th class="px-4 py-2">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @bounties.each do |bounty| %>
+      <tr class="bg-white border-b">
+        <td class="px-4 py-2"><%= bounty.id %></td>
+        <td class="px-4 py-2"><%= link_to bounty.conjecture.title, bounty.conjecture %></td>
+        <td class="px-4 py-2"><%= bounty.user.display_name %></td>
+        <td class="px-4 py-2"><%= bounty.conjecture.user.display_name %></td>
+        <td class="px-4 py-2">$<%= number_with_precision(bounty.amount, precision: 2) %></td>
+        <td class="px-4 py-2"><%= bounty.updated_at.strftime('%Y-%m-%d %H:%M') %></td>
+        <td class="px-4 py-2">
+          <% if bounty.released_at.blank? %>
+            <%= button_to 'Release', admin_release_bounty_path(bounty), method: :post, data: { confirm: 'Release funds to recipient?' }, class: 'bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-3 rounded' %>
+          <% else %>
+            <span class="text-gray-500">Released</span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -22,12 +22,37 @@ class User < ApplicationRecord
     full_name_with_title: 3  # Show title + full name
   }
 
+  # Devise admin flag
+  attribute :admin, :boolean, default: false
+
+  # Add Ethereum/Sonic wallet address for crypto onboarding
+  attribute :wallet_address, :string
+  validates :wallet_address, presence: true, uniqueness: true
+
+  # Removed Rapyd/country/currency logic. This model will be updated for crypto onboarding.
+
   # Validations
   validates :username, uniqueness: true, allow_blank: true
   validates :username, presence: true, if: -> { display_name_preference == "username_only" }
   validates :first_name, :last_name, presence: true, if: -> { full_name? || full_name_with_title? }
   validates :title, presence: true, if: -> { full_name_with_title? }
   validates :title, inclusion: { in: TITLES }, allow_blank: true
+
+  # Returns true if the user has set their name
+  def has_name_set?
+    first_name.present? && last_name.present?
+  end
+
+  # Returns user initials for avatars when no profile picture is available
+  def initials
+    if has_name_set?
+      "#{first_name[0]}#{last_name[0]}".upcase
+    elsif username.present?
+      username[0..1].upcase
+    else
+      "AN" # Anonymous
+    end
+  end
 
   # Returns the user's display name based on their preference
   def display_name
@@ -84,22 +109,6 @@ class User < ApplicationRecord
     end
   end
 
-  # Helper method to check if user has set their name
-  def has_name_set?
-    first_name.present? && last_name.present?
-  end
-
-  # Returns user initials for avatars when no profile picture is available
-  def initials
-    if has_name_set?
-      "#{first_name[0]}#{last_name[0]}".upcase
-    elsif username.present?
-      username[0..1].upcase
-    else
-      "AN" # Anonymous
-    end
-  end
-
   # Calculate total awarded bounty for this user
   def total_awarded_bounty
     # Find all accepted refutations by this user
@@ -109,9 +118,17 @@ class User < ApplicationRecord
     bounty_total = 0
 
     accepted_refutations.each do |refutation|
-      bounty_total += refutation.conjecture.total_bounty
+      # Only count bounties that have been released
+      bounty_total += refutation.conjecture.bounties.where.not(released_at: nil).sum(:amount)
     end
 
     bounty_total
+  end
+
+  # Calculate total received from Popper wallet (actual payouts to user's wallet)
+  def total_received_from_platform
+    Bounty.where.not(released_at: nil)
+      .where(user_id: id)
+      .sum(:amount)
   end
 end

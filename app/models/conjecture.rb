@@ -5,6 +5,7 @@ class Conjecture < ApplicationRecord
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
 
+  attribute :status, :integer, default: 0 # Set default status to :active
   enum :status, { active: 0, refuted: 1 }
 
   validates :title, presence: true

@@ -78,4 +78,16 @@ class ConjectureTest < ActiveSupport::TestCase
       assert_nil Bounty.find_by(id: id), "Bounty still exists after conjecture was destroyed"
     end
   end
+
+  test "should default status to active" do
+    conjecture = Conjecture.new(
+      title: "Test Title",
+      description: "Test description",
+      falsification_criteria: "Test criteria",
+      user: users(:alice)
+      # Note: status is intentionally omitted
+    )
+    assert conjecture.active?, "Conjecture status should default to active"
+    assert_equal :active, conjecture.status.to_sym, "Conjecture status symbol should be :active"
+  end
 end
