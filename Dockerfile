@@ -63,7 +63,18 @@ RUN apt-get update -qq && \
       libgmp10 \
       libffi8 \
       libssl3 \
-      libsecp256k1-0 && \
+      git \
+      build-essential \
+      autoconf \
+      automake \
+      libtool && \
+    git clone https://github.com/bitcoin-core/secp256k1.git /tmp/secp256k1 && \
+    cd /tmp/secp256k1 && \
+    ./autogen.sh && \
+    ./configure --enable-module-recovery --enable-experimental && \
+    make && make install && \
+    cd / && rm -rf /tmp/secp256k1 && \
+    apt-get purge -y --auto-remove git build-essential autoconf automake libtool && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /rails
