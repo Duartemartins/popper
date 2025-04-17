@@ -63,7 +63,7 @@ RUN apt-get update -qq && \
       libgmp10 \
       libffi8 \
       libssl3 \
-      libsecp256k1 && \
+      libsecp256k1-0 && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /rails
