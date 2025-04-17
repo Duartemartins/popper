@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
   # Add Ethereum/Sonic wallet address for crypto onboarding
   attribute :wallet_address, :string
-  validates :wallet_address, presence: true, uniqueness: true
+  validates :wallet_address, uniqueness: true, allow_blank: true
 
   # Removed Rapyd/country/currency logic. This model will be updated for crypto onboarding.
 
