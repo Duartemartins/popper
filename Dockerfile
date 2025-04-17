@@ -73,6 +73,8 @@ RUN apt-get update -qq && \
     ./autogen.sh && \
     ./configure --enable-module-recovery --enable-experimental && \
     make && make install && \
+    ln -sf /usr/local/lib/libsecp256k1.so /usr/local/lib/libsecp256k1.so.1 && \
+    ldconfig && \
     cd / && rm -rf /tmp/secp256k1 && \
     apt-get purge -y --auto-remove git build-essential autoconf automake libtool && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
