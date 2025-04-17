@@ -62,7 +62,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       libgmp10 \
       libffi8 \
-      libssl3 && \
+      libssl3 \
+      libsecp256k1 && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /rails

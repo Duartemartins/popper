@@ -37,3 +37,5 @@
 !/app/assets/builds/.keep
 
 /config/credentials/development.key
+
+git-commit-outside-hours.sh
