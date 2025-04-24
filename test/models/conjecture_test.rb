@@ -55,7 +55,7 @@ class ConjectureTest < ActiveSupport::TestCase
       description: "This conjecture has no bounty",
       falsification_criteria: "Any evidence",
       user: users(:alice),
-      status: :draft
+      status: :active
     )
     assert_equal 0, conjecture.total_bounty
   end
@@ -89,5 +89,17 @@ class ConjectureTest < ActiveSupport::TestCase
     )
     assert conjecture.active?, "Conjecture status should default to active"
     assert_equal :active, conjecture.status.to_sym, "Conjecture status symbol should be :active"
+  end
+
+  test "should be invalid with insult in title" do
+    conjecture = Conjecture.new(title: "Stupid idea", description: "Test description", falsification_criteria: "Test criteria", user: users(:alice), status: :active)
+    assert_not conjecture.valid?
+    assert_includes conjecture.errors[:title], "contains disrespectful language: 'stupid' is not allowed"
+  end
+
+  test "should be invalid with insult in description" do
+    conjecture = Conjecture.new(title: "Test Title", description: "Only an idiot would believe this", falsification_criteria: "Test criteria", user: users(:alice), status: :active)
+    assert_not conjecture.valid?
+    assert_includes conjecture.errors[:description], "contains disrespectful language: 'idiot' is not allowed"
   end
 end

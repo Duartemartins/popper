@@ -28,4 +28,29 @@ class Conjecture < ApplicationRecord
       Tag.find_or_create_by(name: tag_name)
     end
   end
+
+  validate :title_must_be_respectful
+  validate :description_must_be_respectful
+
+  private
+
+  def title_must_be_respectful
+    return if title.blank?
+    ProfanityBlacklist::SERIOUS_PROFANITIES.each do |word|
+      if title.downcase.include?(word)
+        errors.add(:title, "contains serious profanity: '#{word}' is not allowed")
+        break
+      end
+    end
+  end
+
+  def description_must_be_respectful
+    return if description.blank?
+    ProfanityBlacklist::SERIOUS_PROFANITIES.each do |word|
+      if description.downcase.include?(word)
+        errors.add(:description, "contains serious profanity: '#{word}' is not allowed")
+        break
+      end
+    end
+  end
 end

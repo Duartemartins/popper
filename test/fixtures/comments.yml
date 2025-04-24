@@ -2,14 +2,14 @@
 
 one:
   content: MyText
-  user: one
-  commentable: one
-  commentable_type: Commentable
-  parent_id: 1
+  user: alice
+  commentable: active_conjecture
+  commentable_type: Conjecture
+  parent_id:
 
 two:
   content: MyText
-  user: two
-  commentable: two
-  commentable_type: Commentable
-  parent_id: 1
+  user: bob
+  commentable: published_conjecture
+  commentable_type: Conjecture
+  parent_id:
