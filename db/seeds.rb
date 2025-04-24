@@ -66,6 +66,113 @@ begin
     puts "Philosopher user already exists"
   end
 
+  # === Custom Conjectures for Production Seeding ===
+  custom_conjectures = [
+    {
+      title: "Self-supervised transformer language models trained only on next-token prediction cannot achieve more than 95 percent accuracy at detecting single-step logical contradictions in arbitrarily long formal proofs.",
+      description: "Present a peer-reviewed evaluation showing a model that meets or exceeds 95 percent accuracy under the stated training constraint.",
+      falsification_criteria: "Present a peer-reviewed evaluation showing a model that meets or exceeds 95 percent accuracy under the stated training constraint.",
+      tags: ["AI", "Transformers", "Logic"]
+    },
+    {
+      title: "Reinforcement Learning from Human Feedback consistently produces models that exhibit goal mis-generalisation when exposed to novel adversarial instructions.",
+      description: "Provide an empirical study where an RLHF-trained model maintains goal alignment across a comprehensive adversarial instruction set without mis-generalisation.",
+      falsification_criteria: "Provide an empirical study where an RLHF-trained model maintains goal alignment across a comprehensive adversarial instruction set without mis-generalisation.",
+      tags: ["AI", "RLHF", "Safety"]
+    },
+    {
+      title: "Diamond nitrogen-vacancy centre sensors cannot resolve nuclear magnetic resonance signals from a single protein molecule at room temperature in ambient conditions.",
+      description: "Demonstrate a published experiment achieving single-molecule NMR with NV centres under the stated conditions.",
+      falsification_criteria: "Demonstrate a published experiment achieving single-molecule NMR with NV centres under the stated conditions.",
+      tags: ["Quantum sensing", "NV-centre", "Chemistry"]
+    },
+    {
+      title: "Lithium-iron-phosphate battery chemistry cannot surpass a gravimetric energy density of 250 Wh kg⁻¹ at the commercial cell level because of intrinsic crystal-structure limits.",
+      description: "Produce third-party test data confirming a commercially available LiFePO₄ cell exceeding 250 Wh kg⁻¹ while meeting standard safety and cycle-life benchmarks.",
+      falsification_criteria: "Produce third-party test data confirming a commercially available LiFePO₄ cell exceeding 250 Wh kg⁻¹ while meeting standard safety and cycle-life benchmarks.",
+      tags: ["Battery", "Energy storage", "LiFePO₄"]
+    },
+    {
+      title: "Closed-loop insulin delivery with continuous glucose monitoring cannot drive mean HbA1c in adult type-1 diabetics below 6 percent without adjunct behavioural interventions.",
+      description: "Publish a randomised controlled trial where closed-loop technology alone reduces mean HbA1c below 6 percent.",
+      falsification_criteria: "Publish a randomised controlled trial where closed-loop technology alone reduces mean HbA1c below 6 percent.",
+      tags: ["Medicine", "Diabetes", "Health tech"]
+    },
+    {
+      title: "Digital minds implemented on classical computers are not moral patients because phenomenal consciousness requires biological substrates.",
+      description: "Supply a rigorous philosophical argument or empirical evidence showing substrate-independent phenomenal consciousness recognised by mainstream analytic philosophy.",
+      falsification_criteria: "Supply a rigorous philosophical argument or empirical evidence showing substrate-independent phenomenal consciousness recognised by mainstream analytic philosophy.",
+      tags: ["Philosophy", "Consciousness", "Ethics"]
+    },
+    {
+      title: "Large language models without explicit training on formal logic cannot construct a valid novel proof in Zermelo–Fraenkel set theory containing more than fifty inference steps.",
+      description: "Provide a reproducible example of such a model generating and verifying a new valid proof meeting the criterion.",
+      falsification_criteria: "Provide a reproducible example of such a model generating and verifying a new valid proof meeting the criterion.",
+      tags: ["AI", "Theorem proving", "Formal logic"]
+    },
+    {
+      title: "A single oral mRNA therapy cannot achieve systemic protein expression levels comparable to intramuscular mRNA delivery because of gastrointestinal degradation barriers.",
+      description: "Present clinical or pre-clinical data showing oral mRNA administration yielding systemic protein levels on par with intramuscular injection for the same construct.",
+      falsification_criteria: "Present clinical or pre-clinical data showing oral mRNA administration yielding systemic protein levels on par with intramuscular injection for the same construct.",
+      tags: ["Medicine", "mRNA", "Drug delivery"]
+    },
+    {
+      title: "Solar photovoltaic plus battery micro-grids in equatorial Africa cannot maintain levelised electricity costs below 0.15 USD kWh⁻¹ while providing twenty-four-hour reliability without additional diesel backup.",
+      description: "Document audited operational data from a qualifying micro-grid meeting the cost and reliability targets without diesel supplementation.",
+      falsification_criteria: "Document audited operational data from a qualifying micro-grid meeting the cost and reliability targets without diesel supplementation.",
+      tags: ["Energy", "Microgrid", "Africa"]
+    },
+    {
+      title: "Rust language memory-safety guarantees alone are insufficient to prevent at least one critical-severity security vulnerability per million lines of kernel-level code.",
+      description: "Publish a formal analysis or field data set showing zero critical vulnerabilities in one million or more lines of kernel-level Rust code.",
+      falsification_criteria: "Publish a formal analysis or field data set showing zero critical vulnerabilities in one million or more lines of kernel-level Rust code.",
+      tags: ["Software", "Security", "Rust"]
+    },
+    {
+      title: "Active GiveWell top charities deliver at least ten times more DALYs per dollar than the median global health NGO because of targeted cost-effectiveness analysis.",
+      description: "Produce a peer-reviewed cost-effectiveness study indicating the ratio is below ten for current top charities.",
+      falsification_criteria: "Produce a peer-reviewed cost-effectiveness study indicating the ratio is below ten for current top charities.",
+      tags: ["Effective altruism", "Charity", "Global health"]
+    },
+    {
+      title: "Transformer architectures cannot acquire systematic compositional generalisation to novel argument–adjunct pairings in natural language without explicit structural inductive biases.",
+      description: "Show experimental results where a vanilla transformer achieves systematic generalisation on a compositional benchmark equal to models with structural biases.",
+      falsification_criteria: "Show experimental results where a vanilla transformer achieves systematic generalisation on a compositional benchmark equal to models with structural biases.",
+      tags: ["AI", "Compositionality", "Linguistics"]
+    },
+    {
+      title: "Vertical farming of leafy greens cannot achieve a lifecycle carbon intensity lower than conventional open-field production when full energy inputs are accounted for.",
+      description: "Provide a published lifecycle assessment showing vertical farming with lower total carbon intensity under typical grid mixes.",
+      falsification_criteria: "Provide a published lifecycle assessment showing vertical farming with lower total carbon intensity under typical grid mixes.",
+      tags: ["Agriculture", "Vertical farming", "Sustainability"]
+    },
+    {
+      title: "No current state-of-the-art protein-folding algorithm can predict side-chain conformations with a mean absolute error below 0.5 Å across all twenty amino acids without energy-based refinement.",
+      description: "Present benchmarking data where an algorithm meets or surpasses this accuracy without energy refinement steps.",
+      falsification_criteria: "Present benchmarking data where an algorithm meets or surpasses this accuracy without energy refinement steps.",
+      tags: ["Biology", "Protein folding", "Computational biology"]
+    },
+    {
+      title: "Peer review without anonymous refereeing yields lower replication reproducibility in experimental psychology than double-blind review processes.",
+      description: "Publish a meta-analysis showing equal or higher reproducibility rates for open peer review compared with double-blind systems across comparable journals.",
+      falsification_criteria: "Publish a meta-analysis showing equal or higher reproducibility rates for open peer review compared with double-blind systems across comparable journals.",
+      tags: ["Psychology", "Peer review", "Methodology"]
+    }
+  ]
+
+  custom_conjectures.each do |c|
+    conjecture = Conjecture.find_or_create_by!(title: c[:title]) do |conj|
+      conj.description = c[:description]
+      conj.falsification_criteria = c[:falsification_criteria]
+      conj.user = admin
+      conj.status = :active
+    end
+    c[:tags].each do |tag_name|
+      tag = Tag.find_or_create_by!(name: tag_name)
+      Tagging.find_or_create_by!(conjecture: conjecture, tag: tag)
+    end
+  end
+
   # Create sample conjectures
   conjecture1 = Conjecture.find_by(title: "Markets Are Efficient Information Processors")
   if conjecture1.nil?
