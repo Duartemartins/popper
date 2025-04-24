@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-source 'https://rubygems.org'
-gem 'rails-mcp-server'
-=======
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
@@ -66,12 +62,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-
-
-# REMOVE STRIPE GEM
-# gem "stripe"
 gem "tailwindcss-rails", "~> 4.2"
 gem "devise", "~> 4.9"
 gem "eth", "~> 0.5.13"
 gem "rails-mcp-server"
-
