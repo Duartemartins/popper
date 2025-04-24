@@ -1,0 +1,11 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="400" fill="#FFFFFF"/>
+  <!-- Logo (copied from popper-logo.svg, scaled and positioned left) -->
+  <g transform="translate(60,60) scale(0.7)">
+    <circle cx="256" cy="256" r="160" fill="#1A2AD9"/>
+    <rect x="196" y="156" width="120" height="200" rx="60" fill="#FFFFFF"/>
+    <circle cx="256" cy="256" r="56" fill="#1A2AD9"/>
+  </g>
+  <!-- Popper text -->
+  <text x="420" y="250" font-family="'Inter', Arial, sans-serif" font-size="144" font-weight="bold" fill="#1A2AD9" letter-spacing="4">popper</text>
+</svg>
