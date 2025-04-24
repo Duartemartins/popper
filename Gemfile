@@ -64,5 +64,7 @@ end
 
 gem "tailwindcss-rails", "~> 4.2"
 gem "devise", "~> 4.9"
+# REMOVE STRIPE GEM
+# gem "stripe"
 gem "eth", "~> 0.5.13"
 gem "rails-mcp-server"
