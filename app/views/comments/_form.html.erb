@@ -1,0 +1,7 @@
+<%= form_with(model: [commentable, comment], local: true, class: "flex flex-col space-y-2") do |f| %>
+  <div class="field">
+    <%= f.text_area :content, rows: 2, placeholder: 'Add a comment...', class: "mt-1 px-1 py-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 text-sm" %>
+    <%= f.hidden_field :parent_id, value: comment.parent_id %>
+  </div>
+  <%= f.submit(comment.parent_id ? 'Reply' : 'Comment', class: "self-start bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-3 rounded text-sm transition") %>
+<% end %>

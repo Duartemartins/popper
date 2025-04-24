@@ -4,6 +4,7 @@ class Conjecture < ApplicationRecord
   has_many :bounties, dependent: :destroy
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
+  has_many :comments, as: :commentable, dependent: :destroy
 
   attribute :status, :integer, default: 0 # Set default status to :active
   enum :status, { active: 0, refuted: 1 }

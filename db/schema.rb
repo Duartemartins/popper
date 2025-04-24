@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_16_191000) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_24_201803) do
   create_table "bounties", force: :cascade do |t|
     t.decimal "amount"
     t.integer "user_id", null: false
@@ -28,6 +28,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_191000) do
     t.index ["conjecture_id"], name: "index_bounties_on_conjecture_id"
     t.index ["refutation_id"], name: "index_bounties_on_refutation_id"
     t.index ["user_id"], name: "index_bounties_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.integer "user_id", null: false
+    t.string "commentable_type", null: false
+    t.integer "commentable_id", null: false
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "conjectures", force: :cascade do |t|
@@ -96,6 +108,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_191000) do
   add_foreign_key "bounties", "conjectures"
   add_foreign_key "bounties", "refutations"
   add_foreign_key "bounties", "users"
+  add_foreign_key "comments", "users"
   add_foreign_key "conjectures", "users"
   add_foreign_key "refutations", "conjectures"
   add_foreign_key "refutations", "users"

@@ -18,8 +18,10 @@ Rails.application.routes.draw do
       member do
         post :accept
       end
+      resources :comments, only: [:create, :destroy], module: :refutations
     end
     resources :bounties, only: [ :create ]
+    resources :comments, only: [:create, :destroy], module: :conjectures
   end
 
   # REMOVE STRIPE: Stripe webhook route no longer needed

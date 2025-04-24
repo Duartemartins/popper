@@ -1,0 +1,33 @@
+<% content_for :title, @refutation.conjecture.title + " - Refutation - Popper" %>
+
+<div class="max-w-4xl mx-auto">
+  <!-- Refutation details -->
+  <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-2"><%= @refutation.conjecture.title %></h1>
+    <div class="text-gray-600 mb-4">
+      By <%= @refutation.user.display_name %> • <%= time_ago_in_words(@refutation.created_at) %> ago
+    </div>
+    <div class="prose max-w-none mb-4">
+      <%= simple_format(@refutation.content) %>
+    </div>
+  </div>
+
+  <!-- Discussion section -->
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Discussion</h2>
+    <div id="comments" data-controller="comment-reply">
+      <%= turbo_frame_tag "comments" do %>
+        <% @refutation.comments.where(parent_id: nil).each do |comment| %>
+          <%= render partial: 'comments/comment', locals: { comment: comment } %>
+        <% end %>
+        <% if user_signed_in? %>
+          <div id="comment_form">
+            <%= render 'comments/form', commentable: @refutation, comment: Comment.new %>
+          </div>
+        <% else %>
+          <p class="text-gray-600">Sign in to join the discussion.</p>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

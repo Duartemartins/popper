@@ -115,6 +115,8 @@
     <% end %>
   </div>
 
+
+
   <!-- Refutations section -->
   <div class="mb-8">
     <h2 class="text-2xl font-bold text-gray-800 mb-4">Refutations</h2>
@@ -201,6 +203,14 @@
       <%= link_to "Sign in", new_user_session_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded" %>
     </div>
   <% end %>
+
+    <!-- Discussion section -->
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Discussion</h2>
+    <div id="comments" data-controller="comment-reply">
+      <%= render partial: "comments/comments_frame", locals: { conjecture: @conjecture } %>
+    </div>
+  </div>
 
   <div class="mt-6 text-center">
     <%= link_to "Back to conjectures", conjectures_path, class: "text-blue-600 hover:text-blue-800" %>

@@ -16,7 +16,7 @@ Rails.application.configure do
   config.server_timing = true
 
   # Allow access from localhost and 0.0.0.0 in development
-  config.hosts = [ "localhost", "0.0.0.0", "76ad-178-193-44-42.ngrok-free.app" ]
+  config.hosts.clear # Allow all hosts in development. Remove this line for production!
 
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.

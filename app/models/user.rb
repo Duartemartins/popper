@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :conjectures, dependent: :destroy
   has_many :refutations, dependent: :destroy
   has_many :bounties, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
   # Define display name preferences as an enum
   enum :display_name_preference, {

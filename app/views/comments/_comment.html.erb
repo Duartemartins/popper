@@ -1,0 +1,29 @@
+<div id="comment_<%= comment.id %>" class="comment <%= 'reply' if comment.parent_id %> bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 ml-0 <%= 'ml-8' if comment.parent_id %>">
+  <div class="comment-header flex items-center justify-between mb-1">
+    <div class="flex items-center space-x-2">
+      <span class="font-semibold text-gray-800"><%= comment.user.display_name %></span>
+      <span class="comment-date text-xs text-gray-400"><%= time_ago_in_words(comment.created_at) %> ago</span>
+    </div>
+    <% if comment.user == current_user %>
+      <% if comment.commentable_type == "Conjecture" %>
+        <%= button_to 'Delete', conjecture_comment_path(comment.commentable, comment), method: :delete, data: { confirm: 'Delete this comment?' }, class: 'delete-comment text-xs bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded transition ml-2' %>
+      <% elsif comment.commentable_type == "Refutation" %>
+        <%= button_to 'Delete', refutation_comment_path(comment.commentable, comment), method: :delete, data: { confirm: 'Delete this comment?' }, class: 'delete-comment text-xs bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded transition ml-2' %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="comment-body text-gray-700 text-sm mb-2 whitespace-pre-line">
+    <%= simple_format(comment.content) %>
+  </div>
+  <div class="comment-actions mt-2">
+    <%= link_to 'Reply', "#reply_form_#{comment.id}", class: 'reply-link text-blue-600 hover:text-blue-800 font-medium text-xs px-2 py-1 rounded transition bg-blue-50', onclick: "document.getElementById('reply_form_#{comment.id}').style.display='block'; this.style.display='none'; return false;" %>
+  </div>
+  <div id="reply_form_<%= comment.id %>" class="reply-form mt-2" style="display:none">
+    <%= render 'comments/form', commentable: comment.commentable, comment: Comment.new(parent_id: comment.id) %>
+  </div>
+  <div class="comment-replies mt-2">
+    <% comment.replies.each do |reply| %>
+      <%= render partial: 'comments/comment', locals: { comment: reply } %>
+    <% end %>
+  </div>
+</div>

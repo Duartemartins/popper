@@ -4,6 +4,23 @@
   <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-800">New Conjecture</h1>
     <p class="text-gray-600 mt-1">Share your falsifiable idea with the community</p>
+    <details class="mt-4 bg-blue-50 border-l-4 border-blue-400 p-4 rounded" open>
+      <summary class="font-semibold text-blue-700 cursor-pointer">Guidance for Submitting Conjectures on Popper</summary>
+      <ol class="list-decimal list-inside text-sm text-gray-700 mt-2 space-y-2">
+        <li><strong>Frame a clear, testable claim:</strong> Write the conjecture as a single declarative statement that could in principle be proven false by evidence. A conjecture such as “Transformer models will achieve human-level performance on physics word problems by 2030” is testable, whereas “Transformers are interesting” is not. Popper’s principle of falsifiability is the touchstone—if no conceivable observation can contradict the claim, it is unsuitable for the platform.</li>
+        <li><strong>Specify falsification criteria:</strong> Describe exactly what observations, experiments, or logical arguments would count as a refutation. Be concrete and measurable where possible. Precise criteria prevent disputes later about whether a rebuttal succeeds.</li>
+        <li><strong>Provide context and rationale:</strong> Briefly outline why the conjecture matters, the current evidence for it, and any assumptions it rests on. A concise background section helps challengers target the weakest links instead of debating definitions.</li>
+        <li><strong>Attach a bounty that matches the stakes:</strong> Choose an amount large enough to attract informed challengers but proportionate to the importance of the claim and your confidence in it. Bounties create skin in the game and signal genuine interest in the truth of the matter.</li>
+        <li><strong>Cite sources and data:</strong> Link to papers, datasets, code, or prior work that support your position. Quality sourcing raises the bar for criticism and anchors discussion in publicly verifiable material.</li>
+        <li><strong>Set a review period:</strong> State how long the bounty remains open and any interim checkpoints. Short windows suit rapidly moving topics; longer ones suit empirical studies that need time to run.</li>
+        <li><strong>Respond to challenges promptly:</strong> Engage with critiques in good faith, clarify ambiguities, and update the conjecture description if needed. Timely dialogue keeps the debate focused and productive.</li>
+        <li><strong>Close out transparently:</strong> When a refutation meets the stated criteria, mark the conjecture as falsified, pay the bounty, and summarise what was learned. If no refutation arrives by the deadline, record that fact so future users can see the claim’s testing history.</li>
+      </ol>
+      <p class="mt-4 text-sm text-gray-700"><strong>Minimal versus best-practice submission:</strong><br>
+      <span class="ml-4">Minimal: clear statement, falsification criteria, bounty, deadline.<br>
+      Best practice: all the above plus detailed context, references, data links, and diagrams or code when relevant.</span></p>
+      <p class="mt-2 text-sm text-gray-700">Follow these steps to help the community scrutinise your ideas efficiently, reward rigorous challenges, and build a durable public record of tested knowledge.</p>
+    </details>
   </div>
   
   <%= render "form", conjecture: @conjecture %>

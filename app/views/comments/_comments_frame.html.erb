@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "comments" do %>
+  <% conjecture.comments.where(parent_id: nil).each do |comment| %>
+    <%= render partial: 'comments/comment', locals: { comment: comment } %>
+  <% end %>
+  <% if user_signed_in? %>
+    <div id="comment_form">
+      <%= render 'comments/form', commentable: conjecture, comment: Comment.new %>
+    </div>
+  <% else %>
+    <p class="text-gray-600">Sign in to join the discussion.</p>
+  <% end %>
+<% end %>
