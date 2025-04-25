@@ -4,6 +4,8 @@ service: popper
 # Name of the container image.
 image: sintrastellar/popper
 
+deploy_timeout: 60 # How long to wait for container to become healthy
+
 proxy:
   ssl: true
   host: popper.popadex.com
@@ -17,10 +19,6 @@ servers:
     #     - private
     hosts:
       - 128.140.68.36
-    healthcheck:
-      path: /up # Explicitly state the default path
-      port: 3000 # Explicitly state the default port
-      timeout: 60 # Increase timeout to 60 seconds
 
 # Credentials for your image host.
 registry:
