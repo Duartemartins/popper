@@ -17,7 +17,10 @@ servers:
     #     - private
     hosts:
       - 128.140.68.36
-
+    healthcheck:
+      path: /up # Explicitly state the default path
+      port: 3000 # Explicitly state the default port
+      timeout: 60 # Increase timeout to 60 seconds
 
 # Credentials for your image host.
 registry:
@@ -49,5 +52,3 @@ ssh:
 # We'll use a persistent storage volume for uploads and other persistent data.
 volumes:
   - "popper_storage:/rails/storage"
-
-
