@@ -62,6 +62,47 @@
       <p class="text-xs text-gray-500 mt-1">Connect your MetaMask wallet (Ethereum/Sonic) or paste your wallet address. You can add or change this later in your profile.</p>
     </div>
 
+    <div class="field" data-controller="password-visibility">
+      <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <% if @minimum_password_length %>
+      <em class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</em>
+      <% end %>
+      <div class="relative mt-1">
+        <%= f.password_field :password, autocomplete: "new-password", class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ", data: { 'password-visibility-target': 'input' } %>
+        <button type="button" data-action="click->password-visibility#toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700" aria-label="Toggle password visibility">
+          <!-- Heroicon name: eye -->
+          <%# <svg data-password-visibility-target="toggleIconShow" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+          </svg>
+          <!-- Heroicon name: eye-slash -->
+          <svg data-password-visibility-target="toggleIconHide" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 01-2.45 2.45l-1.514-1.514a4 4 0 00-3.032-3.032l-1.514-1.514A10.007 10.007 0 0110 5c1.95 0 3.73.513 5.223 1.348l-1.473 1.473a4.006 4.006 0 00-3.48-3.479zM10 13a3 3 0 01-3-3l4.95-4.95a7.017 7.017 0 013.05.787l-1.514 1.514a2.003 2.003 0 01-2.45 2.45l-1.514 1.514A2.988 2.988 0 0110 13z" clip-rule="evenodd" />
+            <path d="M10 10.5A1.5 1.5 0 118.5 9a1.5 1.5 0 011.5 1.5z" />
+          </svg> %>
+        </button>
+      </div>
+    </div>
+
+    <div class="field" data-controller="password-visibility">
+      <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="relative mt-1">
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ", data: { 'password-visibility-target': 'input' } %>
+        <button type="button" data-action="click->password-visibility#toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700" aria-label="Toggle password confirmation visibility">
+          <!-- Heroicon name: eye -->
+          <%# <svg data-password-visibility-target="toggleIconShow" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+          </svg>
+          <!-- Heroicon name: eye-slash -->
+          <svg data-password-visibility-target="toggleIconHide" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 01-2.45 2.45l-1.514-1.514a4 4 0 00-3.032-3.032l-1.514-1.514A10.007 10.007 0 0110 5c1.95 0 3.73.513 5.223 1.348l-1.473 1.473a4.006 4.006 0 00-3.48-3.479zM10 13a3 3 0 01-3-3l4.95-4.95a7.017 7.017 0 013.05.787l-1.514 1.514a2.003 2.003 0 01-2.45 2.45l-1.514 1.514A2.988 2.988 0 0110 13z" clip-rule="evenodd" />
+            <path d="M10 10.5A1.5 1.5 0 118.5 9a1.5 1.5 0 011.5 1.5z" />
+          </svg> %>
+        </button>
+      </div>
+    </div>
+
     <div class="field">
       <%= f.label :display_name_preference, "Display Name Preference", class: "block text-sm font-medium text-gray-700 mb-1" %>
       <div class="mt-2 space-y-2">
@@ -97,19 +138,6 @@
           </label>
         </div>
       </div>
-    </div>
-
-    <div class="field">
-      <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <% if @minimum_password_length %>
-      <span class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</span>
-      <% end %>
-      <%= f.password_field :password, autocomplete: "new-password", class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" %>
     </div>
 
     <div class="actions">
