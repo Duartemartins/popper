@@ -36,6 +36,7 @@ env:
     RACK_ENV: production
     RAILS_SERVE_STATIC_FILES: true
     RAILS_LOG_TO_STDOUT: true
+    SOLID_QUEUE_IN_PUMA: 1
     HOST: popper.popadex.com
   secret:
     - RAILS_MASTER_KEY

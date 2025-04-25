@@ -23,6 +23,14 @@ class ConjecturesController < ApplicationController
   def show
     @refutation = Refutation.new
     @bounty = Bounty.new
+    if @conjecture.ai_feedback.blank?
+      OpenaiFeedbackJob.perform_later(@conjecture.id)
+      @ai_feedback = nil
+      @ai_feedback_generating = true
+    else
+      @ai_feedback = @conjecture.ai_feedback
+      @ai_feedback_generating = false
+    end
   end
 
   def new

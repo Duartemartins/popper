@@ -9,9 +9,15 @@ class Conjecture < ApplicationRecord
   attribute :status, :integer, default: 0 # Set default status to :active
   enum :status, { active: 0, refuted: 1 }
 
+  # AI feedback on the conjecture (cached)
+  # ai_feedback : text
+  # ai_feedback_generated_at : datetime
+
   validates :title, presence: true
   validates :description, presence: true
   validates :falsification_criteria, presence: true
+
+  after_commit :enqueue_ai_feedback_job, on: :create
 
   def total_bounty
     bounties.sum(:amount)
@@ -52,5 +58,9 @@ class Conjecture < ApplicationRecord
         break
       end
     end
+  end
+
+  def enqueue_ai_feedback_job
+    AiFeedbackJob.perform_later(self.id)
   end
 end

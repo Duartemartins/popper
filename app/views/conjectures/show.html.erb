@@ -54,6 +54,30 @@
     </div>
   </div>
 
+  <!-- AI Feedback section -->
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8"
+       data-controller="expandable"
+       data-expandable-collapsed-value="true"
+       data-expandable-max-height-value="600">
+    <h2 class="text-2xl font-bold text-blue-900 mb-2 flex items-center">
+      <svg class="h-6 w-6 text-blue-600 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/>
+      </svg>
+      AI Feedback
+    </h2>
+    <div class="prose max-w-none text-blue-900">
+      <% if @ai_feedback_generating %>
+        <span class="italic text-blue-700">Generating...</span>
+      <% elsif @ai_feedback.present? %>
+        <%= simple_format(@ai_feedback) %>
+      <% else %>
+        <span class="italic text-blue-700">AI feedback will appear here soon.</span>
+      <% end %>
+    </div>
+    <button type="button" class="expand-toggle mt-2 text-xs text-blue-600 underline cursor-pointer" data-action="expandable#toggle">Expand</button>
+    <div class="text-xs text-blue-500 mt-2">Powered by OpenAI. Feedback may reference recent research and provide a Bayesian estimate of falsification likelihood.</div>
+  </div>
+
   <!-- Bounty section -->
   <div class="bg-white shadow-md rounded-lg p-6 mb-8">
     <div class="flex justify-between items-center mb-4">

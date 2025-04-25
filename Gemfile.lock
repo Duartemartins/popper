@@ -153,6 +153,15 @@ GEM
       openssl (>= 2.2, < 4.0)
       rbsecp256k1 (~> 6.0)
       scrypt (~> 3.0)
+    event_stream_parser (1.0.0)
+    faraday (2.13.1)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-multipart (1.1.0)
+      multipart-post (~> 2.0)
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     fast-mcp (1.2.0)
       base64
       dry-schema (~> 1.14)
@@ -227,6 +236,9 @@ GEM
     mini_portile2 (2.8.8)
     minitest (5.25.5)
     msgpack (1.8.0)
+    multipart-post (2.4.1)
+    net-http (0.6.0)
+      uri
     net-imap (0.5.7)
       date
       net-protocol
@@ -371,6 +383,10 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
+    ruby-openai (8.1.0)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
     scrypt (3.0.8)
@@ -494,6 +510,7 @@ DEPENDENCIES
   rails (~> 8.0.2)
   rails-mcp-server
   rubocop-rails-omakase
+  ruby-openai
   selenium-webdriver
   solid_cable
   solid_cache
