@@ -2,7 +2,8 @@ require "openai"
 
 # Optionally configure OpenAI globally for Kamal compatibility
 OpenAI.configure do |config|
-  config.access_token = ENV.fetch("OPENAI_API_KEY", ENV["OPENAI_ACCESS_TOKEN"])
+  config.access_token = ENV["OPENAI_API_KEY"]
+
   # config.organization_id = ENV["OPENAI_ORGANIZATION_ID"] if ENV["OPENAI_ORGANIZATION_ID"]
   # config.log_errors = true # Uncomment for verbose logging in development
 end
