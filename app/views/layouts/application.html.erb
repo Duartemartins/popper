@@ -80,32 +80,39 @@ height="0" width="0" style="display:none;visibility:hidden" nonce="<%= content_s
       <!-- End Google Tag Manager (noscript) -->
     <% end %>
     <!-- Navigation -->
-    <nav class="bg-blue-800 text-white shadow-md">
+    <nav class="bg-blue-800 text-white shadow-md" data-controller="navbar" data-navbar-hidden-class="hidden">
       <div class="container mx-auto px-6 py-3 flex justify-between items-center">
         <div class="flex items-center">
           <a href="<%= root_path %>" class="text-xl font-bold">Popper</a>
           <span class="ml-2 text-sm text-blue-200">Conjectures and Refutations</span>
         </div>
-        <div class="flex items-center space-x-4">
+        <!-- Hamburger button (mobile only) -->
+        <button type="button" data-action="click->navbar#toggle" class="md:hidden ml-4 focus:outline-none" aria-label="Toggle menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        <!-- Navigation links -->
+        <div data-navbar-target="menu" class="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4 absolute md:static top-16 left-0 w-full md:w-auto bg-blue-800 md:bg-transparent z-50 md:z-auto px-6 py-3 md:p-0 hidden md:flex">
           <% if user_signed_in? %>
             <%= link_to "New Conjecture", new_conjecture_path, class: "hover:text-blue-200" %>
             <%= link_to "Docs", docs_path, class: "hover:text-blue-200" %>
-            <div class="ml-4 relative flex items-center">
+            <div class="relative flex flex-col items-start space-y-1 md:flex-row md:items-center md:space-y-0 md:ml-4">
               <span class="text-sm <%= current_user.total_awarded_bounty > 0 ? 'bg-yellow-600' : 'bg-gray-700' %> text-white px-2 py-1 rounded mr-2">
                 <span class="font-medium">Ξ<%= number_with_precision(current_user.total_awarded_bounty, precision: 5, strip_insignificant_zeros: true) %></span> earned
               </span>
               <%= link_to profile_path, class: "text-md hover:text-blue-200" do %>
                 <span>Profile</span>
               <% end %>
-              <%= link_to "Sign Out", destroy_user_session_path, class: "ml-2 text-sm text-blue-200 hover:text-white" %>
+              <%= link_to "Sign Out", destroy_user_session_path, class: "md:ml-2 text-sm text-blue-200 hover:text-white" %>
             </div>
           <% else %>
-            <%= link_to "Sign In", new_user_session_path, class: "hover:text-blue-200" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "ml-2 bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-md" %>
+            <%= link_to "Sign In", new_user_session_path, class: "md:ml-2 bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-md" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "md:ml-2 bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-md" %>
           <% end %>
           <div data-controller="metamask">
             <button type="button" 
-              data-action="click->metamask#connectMetaMask" data-metamask-target="button" id="navbar-connect-metamask" class="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1 px-3 rounded">
+              data-action="click->metamask#connectMetaMask" data-metamask-target="button" id="navbar-connect-metamask" class="mt-2 md:mt-0 md:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1 px-3 rounded">
               Connect MetaMask
             </button>
             <span id="navbar-wallet-address" data-metamask-target="address" class="ml-2 text-xs text-blue-200"></span>
