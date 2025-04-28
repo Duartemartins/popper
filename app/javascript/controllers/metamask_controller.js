@@ -25,6 +25,11 @@ export default class extends Controller {
   async connectMetaMask() {
     if (window.ethereum) {
       try {
+        // Always prompt the account picker
+        await window.ethereum.request({
+          method: 'wallet_requestPermissions',
+          params: [{ eth_accounts: {} }]
+        });
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const addr = accounts[0];
         window.localStorage.setItem('wallet_address', addr);
@@ -45,6 +50,30 @@ export default class extends Controller {
     const input = document.getElementById('user_wallet_address') || document.getElementById('wallet_address');
     if (input) input.value = '';
     this.showAddress('');
+    // Reload the page to fully reset MetaMask connection state
+    window.location.reload();
+  }
+
+  async switchWallet() {
+    if (window.ethereum && window.ethereum.request) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_requestPermissions',
+          params: [{ eth_accounts: {} }]
+        });
+        // After switching, update UI
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        const addr = accounts[0];
+        window.localStorage.setItem('wallet_address', addr);
+        const input = document.getElementById('user_wallet_address') || document.getElementById('wallet_address');
+        if (input) input.value = addr;
+        this.showAddress(addr);
+      } catch (err) {
+        alert('MetaMask switch account failed: ' + err.message);
+      }
+    } else {
+      alert('MetaMask is not installed.');
+    }
   }
 
   showAddress(addr) {
