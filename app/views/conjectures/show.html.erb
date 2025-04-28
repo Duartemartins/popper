@@ -95,14 +95,18 @@
         <div class="bg-gray-50 rounded-md p-4">
           <ul class="divide-y divide-gray-200">
             <% @conjecture.bounties.includes(:user).each do |bounty| %>
-              <li class="py-3 flex justify-between items-center">
-                <span class="text-gray-700"><%= bounty.user.display_name %></span>
-                <span class="font-medium text-green-600">Ξ<%= number_with_precision(bounty.amount, precision: 5, strip_insignificant_zeros: true) %></span>
-                <% if bounty.paid? %>
-                  <span class="ml-2 inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Confirmed</span>
-                <% else %>
-                  <span class="ml-2 inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Unconfirmed</span>
-                <% end %>
+              <li class="py-3 flex items-center justify-between">
+                <!-- Left: User name -->
+                <span class="text-gray-700 flex-1"><%= bounty.user.display_name %></span>
+                <!-- Right: Bounty value and confirmation -->
+                <div class="flex items-center space-x-2">
+                  <span class="font-medium text-green-600">Ξ<%= number_with_precision(bounty.amount, precision: 5, strip_insignificant_zeros: true) %></span>
+                  <% if bounty.paid? %>
+                    <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Confirmed</span>
+                  <% else %>
+                    <span class="inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Unconfirmed</span>
+                  <% end %>
+                </div>
               </li>
             <% end %>
           </ul>
