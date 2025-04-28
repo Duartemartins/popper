@@ -4,7 +4,7 @@ service: popper
 # Name of the container image.
 image: sintrastellar/popper
 
-deploy_timeout: 60 # How long to wait for container to become healthy
+deploy_timeout: 120 # How long to wait for container to become healthy
 
 proxy:
   ssl: true

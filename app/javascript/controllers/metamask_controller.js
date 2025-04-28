@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="metamask"
 export default class extends Controller {
-  static targets = ["button", "address"]
+  static targets = ["button", "address", "disconnect"]
 
   connect() {
     console.log("Metamask Stimulus controller connected!");
@@ -15,6 +15,11 @@ export default class extends Controller {
         this.handleAccountsChanged(accounts);
       });
     }
+    // Also update the input field if a saved address exists
+    const input = document.getElementById('user_wallet_address') || document.getElementById('wallet_address');
+    if (savedAddr && input) {
+      input.value = savedAddr;
+    }
   }
 
   async connectMetaMask() {
@@ -23,6 +28,9 @@ export default class extends Controller {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const addr = accounts[0];
         window.localStorage.setItem('wallet_address', addr);
+        // Update the input field
+        const input = document.getElementById('user_wallet_address') || document.getElementById('wallet_address');
+        if (input) input.value = addr;
         this.showAddress(addr);
       } catch (err) {
         alert('MetaMask connection failed: ' + err.message);
@@ -32,13 +40,25 @@ export default class extends Controller {
     }
   }
 
+  disconnectMetaMask() {
+    window.localStorage.removeItem('wallet_address');
+    const input = document.getElementById('user_wallet_address') || document.getElementById('wallet_address');
+    if (input) input.value = '';
+    this.showAddress('');
+  }
+
   showAddress(addr) {
+    const input = document.getElementById('user_wallet_address') || document.getElementById('wallet_address');
     if (addr) {
       this.addressTarget.textContent = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
       this.buttonTarget.classList.add('hidden');
+      if (this.hasDisconnectTarget) this.disconnectTarget.classList.remove('hidden');
+      if (input) input.value = addr;
     } else {
       this.addressTarget.textContent = '';
       this.buttonTarget.classList.remove('hidden');
+      if (this.hasDisconnectTarget) this.disconnectTarget.classList.add('hidden');
+      if (input) input.value = '';
     }
   }
 

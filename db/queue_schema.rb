@@ -10,62 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_28_210729) do
-  create_table "bounties", force: :cascade do |t|
-    t.decimal "amount"
-    t.integer "user_id", null: false
-    t.integer "conjecture_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "paid", default: false
-    t.datetime "released_at"
-    t.string "rapyd_payment_id"
-    t.string "rapyd_escrow_status"
-    t.string "tx_hash"
-    t.integer "refutation_id"
-    t.boolean "pending_wallet", default: false, null: false
-    t.string "payout_tx_hash"
-    t.index ["conjecture_id"], name: "index_bounties_on_conjecture_id"
-    t.index ["refutation_id"], name: "index_bounties_on_refutation_id"
-    t.index ["user_id"], name: "index_bounties_on_user_id"
-  end
-
-  create_table "comments", force: :cascade do |t|
-    t.text "content"
-    t.integer "user_id", null: false
-    t.string "commentable_type", null: false
-    t.integer "commentable_id", null: false
-    t.integer "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
-    t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
-  create_table "conjectures", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.text "falsification_criteria"
-    t.integer "status"
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "ai_feedback"
-    t.datetime "ai_feedback_generated_at"
-    t.index ["user_id"], name: "index_conjectures_on_user_id"
-  end
-
-  create_table "refutations", force: :cascade do |t|
-    t.text "content"
-    t.integer "conjecture_id", null: false
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "accepted"
-    t.index ["conjecture_id"], name: "index_refutations_on_conjecture_id"
-    t.index ["user_id"], name: "index_refutations_on_user_id"
-  end
-
+ActiveRecord::Schema[8.0].define(version: 1) do
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
     t.bigint "job_id", null: false
     t.string "queue_name", null: false
@@ -173,57 +118,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_210729) do
     t.datetime "scheduled_at", null: false
     t.datetime "created_at", null: false
     t.index ["job_id"], name: "index_solid_queue_scheduled_executions_on_job_id", unique: true
-    t.index ["queue_name", "scheduled_at", "priority", "job_id"], name: "index_solid_queue_scheduled_executions_for_polling"
-    t.index ["scheduled_at", "priority", "job_id"], name: "index_solid_queue_scheduled_executions_for_dispatch"
+    t.index ["scheduled_at", "priority", "job_id"], name: "index_solid_queue_dispatch_all"
   end
 
-  create_table "taggings", force: :cascade do |t|
-    t.integer "conjecture_id", null: false
-    t.integer "tag_id", null: false
+  create_table "solid_queue_semaphores", force: :cascade do |t|
+    t.string "key", null: false
+    t.integer "value", default: 1, null: false
+    t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["conjecture_id"], name: "index_taggings_on_conjecture_id"
-    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
+    t.index ["key", "value"], name: "index_solid_queue_semaphores_on_key_and_value"
+    t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
-  create_table "tags", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "username"
-    t.string "title"
-    t.string "first_name"
-    t.string "last_name"
-    t.integer "display_name_preference"
-    t.string "organization"
-    t.boolean "admin"
-    t.string "rapyd_wallet_id"
-    t.string "country", default: "", null: false
-    t.string "rapyd_customer_id"
-    t.string "currency", default: "", null: false
-    t.string "wallet_address"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["rapyd_wallet_id"], name: "index_users_on_rapyd_wallet_id", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  add_foreign_key "bounties", "conjectures"
-  add_foreign_key "bounties", "refutations"
-  add_foreign_key "bounties", "users"
-  add_foreign_key "comments", "users"
-  add_foreign_key "conjectures", "users"
-  add_foreign_key "refutations", "conjectures"
-  add_foreign_key "refutations", "users"
-  add_foreign_key "taggings", "conjectures"
-  add_foreign_key "taggings", "tags"
+  add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
 end

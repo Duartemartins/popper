@@ -13,10 +13,10 @@ class BountiesController < ApplicationController
     @bounty = @conjecture.bounties.find(params[:id])
     recipient = @conjecture.user
     amount_eth = @bounty.amount.to_f
-    if recipient.eth_address.blank?
-      redirect_to @conjecture, alert: 'Recipient does not have an Ethereum address.' and return
+    if recipient.wallet_address.blank?
+      redirect_to @conjecture, alert: 'Recipient does not have a wallet address.' and return
     end
-    tx_hash = EthereumWallet.send_eth(recipient.eth_address, amount_eth)
+    tx_hash = EthereumWallet.send_eth(recipient.wallet_address, amount_eth)
     if tx_hash.present?
       @bounty.update!(released_at: Time.current, eth_tx_hash: tx_hash)
       redirect_to @conjecture, notice: "Bounty released to recipient! Ethereum tx: #{tx_hash}"

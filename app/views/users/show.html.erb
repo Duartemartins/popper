@@ -68,9 +68,7 @@
         <% if @user.wallet_address.present? %>
           <p class="mb-2"><span class="font-medium">Wallet Address:</span> <%= @user.wallet_address %></p>
         <% end %>
-        
-        <p class="mb-2"><span class="font-medium">Ethereum Address:</span> <span class="font-mono"><%= @user.eth_address.presence || 'Not set' %></span></p>
-        
+                
         <p class="mb-2"><span class="font-medium">Email:</span> <%= @user.email %></p>
         <p class="mb-2"><span class="font-medium">Member since:</span> <%= @user.created_at.strftime("%B %d, %Y") %></p>
       </div>
