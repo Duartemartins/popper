@@ -97,6 +97,8 @@ class User < ApplicationRecord
     end
   end
 
+  public # Make display_name and other methods public
+
   # Returns the user's display name based on their preference
   def display_name
     base_name = case display_name_preference
