@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :refutations, dependent: :destroy
   has_many :bounties, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :processed_transactions, dependent: :destroy
 
   # Define display name preferences as an enum
   enum :display_name_preference, {
@@ -29,6 +30,47 @@ class User < ApplicationRecord
   # Add Ethereum/Sonic wallet address for crypto onboarding
   attribute :wallet_address, :string
   validates :wallet_address, uniqueness: true, allow_blank: true
+  validates :wallet_address, format: { 
+    with: /\A0x[a-fA-F0-9]{40}\z/, 
+    message: "must be a valid Ethereum address (0x followed by 40 hex characters)" 
+  }, allow_blank: true
+  
+  # Custom validation for checksum
+  validate :valid_ethereum_address_checksum, if: -> { wallet_address.present? }
+
+  private
+
+  def valid_ethereum_address_checksum
+    return unless wallet_address.present?
+    
+    # Basic format check (already handled by regex above)
+    return unless wallet_address.match?(/\A0x[a-fA-F0-9]{40}\z/)
+    
+    # Check if it's a valid checksummed address
+    address = wallet_address[2..-1] # Remove 0x prefix
+    
+    # If the address is all lowercase or all uppercase, it's valid (no checksum)
+    return if address == address.downcase || address == address.upcase
+    
+    # For mixed case, validate checksum using Keccak256
+    begin
+      require 'digest/keccak'
+      hash = Digest::Keccak.hexdigest(address.downcase, 256)
+      
+      address.chars.each_with_index do |char, i|
+        if char.match?(/[a-fA-F]/)
+          expected_case = hash[i].to_i(16) >= 8 ? char.upcase : char.downcase
+          unless char == expected_case
+            errors.add(:wallet_address, "has invalid checksum")
+            return
+          end
+        end
+      end
+    rescue => e
+      Rails.logger.error("Checksum validation error: #{e.message}")
+      errors.add(:wallet_address, "could not validate checksum")
+    end
+  end
 
   # Removed Rapyd/country/currency logic. This model will be updated for crypto onboarding.
 

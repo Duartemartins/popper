@@ -55,6 +55,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_210729) do
     t.index ["user_id"], name: "index_conjectures_on_user_id"
   end
 
+  create_table "processed_transactions", force: :cascade do |t|
+    t.string "tx_hash", null: false
+    t.bigint "bounty_id", null: false
+    t.bigint "user_id", null: false
+    t.decimal "amount", precision: 18, scale: 8, null: false
+    t.string "from_address", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bounty_id", "created_at"], name: "index_processed_transactions_on_bounty_id_and_created_at"
+    t.index ["tx_hash"], name: "index_processed_transactions_on_tx_hash", unique: true
+    t.index ["user_id", "created_at"], name: "index_processed_transactions_on_user_id_and_created_at"
+  end
+
   create_table "refutations", force: :cascade do |t|
     t.text "content"
     t.integer "conjecture_id", null: false
@@ -222,6 +235,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_210729) do
   add_foreign_key "bounties", "users"
   add_foreign_key "comments", "users"
   add_foreign_key "conjectures", "users"
+  add_foreign_key "processed_transactions", "bounties"
+  add_foreign_key "processed_transactions", "users"
   add_foreign_key "refutations", "conjectures"
   add_foreign_key "refutations", "users"
   add_foreign_key "taggings", "conjectures"

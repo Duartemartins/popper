@@ -16,12 +16,19 @@ begin
     admin = User.create!(
       email: 'admin_two@example.com',
       password: 'password',
-      password_confirmation: 'password'
+      password_confirmation: 'password',
+      admin: true
     )
     users_created += 1
-    puts "Created admin user"
+    puts "Created admin user with admin privileges"
   else
-    puts "Admin user already exists"
+    # Ensure existing admin has admin privileges
+    unless admin.admin?
+      admin.update!(admin: true)
+      puts "Updated existing admin user with admin privileges"
+    else
+      puts "Admin user already exists with proper privileges"
+    end
   end
 
   # Create a regular user if doesn't exist

@@ -2,6 +2,7 @@ class Bounty < ApplicationRecord
   belongs_to :user
   belongs_to :conjecture
   belongs_to :refutation, optional: true
+  has_one :processed_transaction, dependent: :destroy
 
   # Track whether bounty has been paid
   attribute :paid, :boolean, default: false

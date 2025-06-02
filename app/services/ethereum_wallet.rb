@@ -14,6 +14,13 @@ class EthereumWallet
       Rails.logger.error("[EthereumWallet] No private key configured! Check your credentials or ETHEREUM_PRIVATE_KEY env var.")
       raise "Ethereum private key not configured!"
     end
+    
+    # Security: Validate private key format and never log it
+    unless private_key.match?(/\A[a-fA-F0-9]{64}\z/)
+      Rails.logger.error("[EthereumWallet] Invalid private key format - must be 64 hex characters")
+      raise "Invalid Ethereum private key format!"
+    end
+    
     Eth::Key.new priv: private_key
   end
 
@@ -109,12 +116,22 @@ class EthereumWallet
     value = (amount.to_f * 10**18).to_i # Integer, not hex string!
     Rails.logger.info("[EthereumWallet] Value (wei): #{value}")
     
-    # Get gas price (use legacy pricing)
+    # Get gas price (use legacy pricing with validation)
     gas_price = 5_000_000_000 # 5 gwei default
     begin
       fee_data = get_fee_data
-      gas_price = fee_data[:max_fee_per_gas].to_i
-      Rails.logger.info("[EthereumWallet] Using gas price: #{gas_price} wei (#{gas_price.to_f / 10**9} gwei)")
+      proposed_gas_price = fee_data[:max_fee_per_gas].to_i
+      
+      # Validate gas price is reasonable (between 1 gwei and 100 gwei)
+      min_gas_price = 1_000_000_000  # 1 gwei
+      max_gas_price = 100_000_000_000 # 100 gwei
+      
+      if proposed_gas_price >= min_gas_price && proposed_gas_price <= max_gas_price
+        gas_price = proposed_gas_price
+        Rails.logger.info("[EthereumWallet] Using network gas price: #{gas_price} wei (#{gas_price.to_f / 10**9} gwei)")
+      else
+        Rails.logger.warn("[EthereumWallet] Network gas price #{proposed_gas_price} wei is outside safe range (#{min_gas_price}-#{max_gas_price}), using default")
+      end
     rescue => e
       Rails.logger.warn("[EthereumWallet] Error getting fee data, using default gas price: #{e.message}")
     end
@@ -251,7 +268,8 @@ class EthereumWallet
   end
 
   def self.post_rpc(data)
-    Rails.logger.info("[EthereumWallet] RPC Request: #{data.to_json}")
+    # Security: Never log request data as it may contain sensitive information
+    Rails.logger.info("[EthereumWallet] Making RPC request to: #{rpc_url}")
     uri = URI(rpc_url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = uri.scheme == "https"
@@ -259,7 +277,16 @@ class EthereumWallet
     req["Content-Type"] = "application/json"
     req.body = data.to_json
     resp = http.request(req)
-    Rails.logger.info("[EthereumWallet] RPC Response: #{resp.body}")
+    
+    # Security: Only log response for non-sensitive methods
+    sensitive_methods = ['eth_sendRawTransaction']
+    method_name = data[:method] || data['method']
+    if sensitive_methods.include?(method_name)
+      Rails.logger.info("[EthereumWallet] RPC Response: [REDACTED - sensitive method]")
+    else
+      Rails.logger.info("[EthereumWallet] RPC Response: #{resp.body}")
+    end
+    
     JSON.parse(resp.body)
   rescue => e
     Rails.logger.error("[EthereumWallet] Ethereum RPC error: #{e.message}")
