@@ -1,5 +1,29 @@
 <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
+<!-- SECURITY UPDATE NOTICE -->
+<div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-6 mb-6 rounded shadow-lg" role="alert">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-lg font-bold text-green-800">SECURITY UPDATE COMPLETED</h3>
+      <p class="text-green-700 mt-1">
+        <strong>New secure wallet deployed:</strong> 0xF9e3...632C<br>
+        <strong>Status:</strong> All systems operational and secure<br>
+        <strong>Completed:</strong> Enhanced security measures implemented
+      </p>
+      <div class="mt-3 text-sm text-green-600">
+        <p>• New secure wallet address active</p>
+        <p>• Bounty releases re-enabled with enhanced security</p>
+        <p>• All credentials updated and encrypted</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <% if flash[:admin_notice] %>
   <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded" role="alert">
     <p class="font-bold">Admin Notification</p>

@@ -1,7 +1,7 @@
 class Admin::BountiesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_admin!
-  before_action :set_bounty, only: [:release]
+  before_action :set_bounty, only: [ :release ]
 
   # Show all bounties in escrow (paid, not released)
   def escrow
@@ -14,29 +14,29 @@ class Admin::BountiesController < ApplicationController
     expected_confirmation = "CONFIRM_PAYOUT_#{@bounty.id}_#{Time.current.to_i / 300}" # Valid for 5 minutes
     unless params[:admin_confirmation] == expected_confirmation
       Rails.logger.warn("[BountyRelease] Invalid confirmation from admin #{current_user.id} for bounty #{@bounty.id}")
-      redirect_to admin_bounties_escrow_path, alert: 'Invalid or expired confirmation. Please try again.' and return
+      redirect_to admin_bounties_escrow_path, alert: "Invalid or expired confirmation. Please try again." and return
     end
-    
+
     # Only release if not already released
     if @bounty.released_at.present?
       Rails.logger.info("[BountyRelease] Attempted to release already released bounty id=#{@bounty.id}")
-      redirect_to admin_bounties_escrow_path, alert: 'Bounty already released.' and return
+      redirect_to admin_bounties_escrow_path, alert: "Bounty already released." and return
     end
 
     # Rate limiting: Check for recent releases by this admin
     recent_releases = Bounty.where(released_at: 5.minutes.ago..Time.current)
-                           .where('payout_tx_hash IS NOT NULL')
+                           .where("payout_tx_hash IS NOT NULL")
                            .count
-    
+
     if recent_releases >= 3
       Rails.logger.warn("[BountyRelease] Rate limit exceeded for admin #{current_user.id}")
-      redirect_to admin_bounties_escrow_path, alert: 'Too many recent releases. Please wait before releasing more bounties.' and return
+      redirect_to admin_bounties_escrow_path, alert: "Too many recent releases. Please wait before releasing more bounties." and return
     end
 
     # Security: Additional verification that the bounty was properly funded
     unless @bounty.paid? && @bounty.processed_transaction.present?
       Rails.logger.warn("[BountyRelease] Attempted to release unfunded bounty id=#{@bounty.id}")
-      redirect_to admin_bounties_escrow_path, alert: 'Cannot release bounty: no verified funding transaction found.' and return
+      redirect_to admin_bounties_escrow_path, alert: "Cannot release bounty: no verified funding transaction found." and return
     end
 
     # Determine the refutation owner
@@ -68,7 +68,7 @@ class Admin::BountiesController < ApplicationController
       tx_hash = EthereumWallet.send_eth(recipient_wallet, amount)
       Rails.logger.info("[BountyRelease] Payout successful. Bounty id=#{@bounty.id} tx_hash=#{tx_hash}")
       @bounty.update!(released_at: Time.current, payout_tx_hash: tx_hash, pending_wallet: false)
-      redirect_to admin_bounties_escrow_path, notice: 'Bounty released and payout sent!'
+      redirect_to admin_bounties_escrow_path, notice: "Bounty released and payout sent!"
     rescue => e
       Rails.logger.error("[BountyRelease] Failed to release bounty id=#{@bounty.id}: #{e.message}")
       redirect_to admin_bounties_escrow_path, alert: "Failed to release bounty: #{e.message}"
@@ -82,7 +82,7 @@ class Admin::BountiesController < ApplicationController
 
   def require_admin!
     unless current_user&.admin?
-      redirect_to root_path, alert: 'Admins only.'
+      redirect_to root_path, alert: "Admins only."
     end
   end
 end
