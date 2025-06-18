@@ -8,10 +8,10 @@ class CreateProcessedTransactions < ActiveRecord::Migration[8.0]
       t.string :from_address, null: false
       t.timestamps
     end
-    
+
     add_foreign_key :processed_transactions, :bounties
     add_foreign_key :processed_transactions, :users
-    add_index :processed_transactions, [:user_id, :created_at]
-    add_index :processed_transactions, [:bounty_id, :created_at]
+    add_index :processed_transactions, [ :user_id, :created_at ]
+    add_index :processed_transactions, [ :bounty_id, :created_at ]
   end
 end

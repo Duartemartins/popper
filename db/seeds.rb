@@ -169,31 +169,31 @@ begin
       title: "Universal Basic Income",
       description: "Implementing a universal basic income (UBI) will reduce poverty rates without significantly decreasing labor force participation.",
       falsification_criteria: "Present longitudinal data from a large-scale UBI pilot showing no significant reduction in poverty or a substantial drop in labor force participation.",
-      tags: ["Public policy", "UBI", "Economics"]
+      tags: [ "Public policy", "UBI", "Economics" ]
     },
     {
       title: "Carbon Tax Effectiveness",
       description: "A national carbon tax set above $50/ton will lead to a measurable reduction in greenhouse gas emissions within five years of implementation.",
       falsification_criteria: "Show national emissions data from a country with a $50+/ton carbon tax where emissions did not decline within five years.",
-      tags: ["Public policy", "Climate", "Taxation"]
+      tags: [ "Public policy", "Climate", "Taxation" ]
     },
     {
       title: "Rent Control Impact",
       description: "Strict rent control policies in major cities lead to reduced overall housing availability and increased rents in uncontrolled segments.",
       falsification_criteria: "Provide empirical evidence from a major city with strict rent control where overall housing availability increased and uncontrolled rents did not rise.",
-      tags: ["Public policy", "Housing", "Economics"]
+      tags: [ "Public policy", "Housing", "Economics" ]
     },
     {
       title: "School Choice Outcomes",
       description: "Expanding school choice programs (e.g., vouchers, charters) improves average student academic outcomes in low-income districts.",
       falsification_criteria: "Present meta-analytic data showing no improvement or a decline in average academic outcomes in low-income districts after expanding school choice.",
-      tags: ["Public policy", "Education", "School choice"]
+      tags: [ "Public policy", "Education", "School choice" ]
     },
     {
       title: "Healthcare Single Payer",
       description: "Adopting a single-payer healthcare system in a developed country reduces per capita healthcare costs without lowering aggregate health outcomes.",
       falsification_criteria: "Show data from a developed country where single-payer adoption led to higher per capita costs or worse aggregate health outcomes.",
-      tags: ["Public policy", "Healthcare", "Single payer"]
+      tags: [ "Public policy", "Healthcare", "Single payer" ]
     }
   ]
 
