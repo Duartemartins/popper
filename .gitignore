@@ -40,3 +40,5 @@
 
 git-commit-outside-hours.sh
 scripts/emergency_wallet_replacement.rb
+/docs/*
+/.gitleaks.toml
